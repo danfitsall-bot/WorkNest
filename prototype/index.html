@@ -87,22 +87,22 @@
       </p>
 
       <!-- Search bar -->
-      <div class="bg-white rounded-2xl p-2 max-w-2xl mx-auto flex gap-2 shadow-xl">
+      <div id="hero-search" class="bg-white rounded-2xl p-2 max-w-2xl mx-auto flex gap-2 shadow-xl">
         <div class="flex-1 flex items-center gap-2 px-3">
           <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
           </svg>
-          <input type="text" placeholder="Job title, keyword, company..." class="w-full text-gray-900 text-sm outline-none placeholder-gray-400" />
+          <input id="hero-q" type="text" placeholder="Job title, keyword, company..." class="w-full text-gray-900 text-sm outline-none placeholder-gray-400" />
         </div>
         <div class="border-l border-gray-200 flex items-center gap-2 px-3">
           <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
           </svg>
-          <input type="text" placeholder="Location or remote" class="w-36 text-gray-900 text-sm outline-none placeholder-gray-400" />
+          <input id="hero-location" type="text" placeholder="Location or remote" class="w-36 text-gray-900 text-sm outline-none placeholder-gray-400" />
         </div>
-        <a href="jobs.html" class="bg-teal-600 hover:bg-teal-700 text-white font-semibold px-5 py-2.5 rounded-xl transition-colors text-sm">
+        <button id="hero-search-btn" class="bg-teal-600 hover:bg-teal-700 text-white font-semibold px-5 py-2.5 rounded-xl transition-colors text-sm">
           Search Jobs
-        </a>
+        </button>
       </div>
 
       <!-- Quick filters -->
@@ -396,13 +396,13 @@
       <div class="text-2xl mb-3">📬</div>
       <h2 class="text-2xl font-bold text-gray-900 mb-2">Get the best flexible jobs weekly</h2>
       <p class="text-gray-500 text-sm mb-6">Curated every Thursday. Flexible, remote, parent-friendly roles delivered to your inbox. No spam.</p>
-      <div class="flex gap-2 max-w-sm mx-auto">
-        <input type="email" placeholder="you@email.com" class="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent" />
-        <button class="bg-teal-600 hover:bg-teal-700 text-white font-semibold px-4 py-2.5 rounded-xl text-sm transition-colors">
+      <div id="newsletter-form" class="flex gap-2 max-w-sm mx-auto">
+        <input id="newsletter-email" type="email" placeholder="you@email.com" class="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent" />
+        <button id="newsletter-btn" class="bg-teal-600 hover:bg-teal-700 text-white font-semibold px-4 py-2.5 rounded-xl text-sm transition-colors">
           Subscribe
         </button>
       </div>
-      <p class="text-xs text-gray-400 mt-3">Join 18,000+ parents already subscribed · Unsubscribe anytime</p>
+      <p id="newsletter-sub" class="text-xs text-gray-400 mt-3">Join 18,000+ parents already subscribed · Unsubscribe anytime</p>
     </div>
   </section>
 
@@ -455,6 +455,52 @@
       </div>
     </div>
   </footer>
+
+  <script>
+  (function () {
+    // ── Hero search ───────────────────────────────────────────────────────────
+    const heroSearchBtn = document.getElementById('hero-search-btn');
+    const heroQ = document.getElementById('hero-q');
+    const heroLocation = document.getElementById('hero-location');
+
+    function doSearch() {
+      const q = heroQ.value.trim();
+      const loc = heroLocation.value.trim();
+      const params = new URLSearchParams();
+      if (q) params.set('q', q);
+      if (loc) params.set('location', loc);
+      window.location.href = 'jobs.html' + (params.toString() ? '?' + params.toString() : '');
+    }
+
+    heroSearchBtn.addEventListener('click', doSearch);
+    [heroQ, heroLocation].forEach(el => {
+      el.addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
+    });
+
+    // ── Newsletter ────────────────────────────────────────────────────────────
+    const newsletterBtn = document.getElementById('newsletter-btn');
+    const newsletterEmail = document.getElementById('newsletter-email');
+    const newsletterForm = document.getElementById('newsletter-form');
+    const newsletterSub = document.getElementById('newsletter-sub');
+
+    newsletterBtn.addEventListener('click', () => {
+      const email = newsletterEmail.value.trim();
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        newsletterEmail.classList.add('border-red-400', 'ring-1', 'ring-red-400');
+        newsletterEmail.placeholder = 'Please enter a valid email';
+        setTimeout(() => {
+          newsletterEmail.classList.remove('border-red-400', 'ring-1', 'ring-red-400');
+          newsletterEmail.placeholder = 'you@email.com';
+        }, 2500);
+        return;
+      }
+      newsletterForm.innerHTML = '<div class="flex items-center justify-center gap-2 text-teal-700 font-semibold text-sm py-2"><span class="text-xl">✅</span> You\'re subscribed! First edition lands Thursday.</div>';
+      newsletterSub.textContent = 'Welcome to the WorkNest community · Check your inbox for a confirmation';
+    });
+
+    newsletterEmail.addEventListener('keydown', e => { if (e.key === 'Enter') newsletterBtn.click(); });
+  })();
+  </script>
 
 </body>
 </html>

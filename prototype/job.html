@@ -151,8 +151,8 @@
               </div>
               <div class="bg-white rounded-xl border border-teal-200 px-4 py-2 text-center salary-calc">
                 <p class="text-xs text-teal-600 font-medium">Est. monthly take-home</p>
-                <p class="text-xl font-bold text-teal-800">£3,847</p>
-                <p class="text-xs text-teal-500">after ~£800 childcare/mo</p>
+                <p id="calc-result" class="text-xl font-bold text-teal-800">£3,847</p>
+                <p id="calc-childcare-note" class="text-xs text-teal-500">after ~£800 childcare/mo</p>
               </div>
             </div>
           </div>
@@ -209,11 +209,11 @@
 
       <!-- Share & Save -->
       <div class="flex gap-3">
-        <button class="flex items-center gap-2 border border-gray-200 text-gray-600 text-sm font-medium px-4 py-2.5 rounded-xl hover:border-teal-400 hover:text-teal-600 transition-colors">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-          Save job
+        <button id="save-btn" class="flex items-center gap-2 border border-gray-200 text-gray-600 text-sm font-medium px-4 py-2.5 rounded-xl hover:border-teal-400 hover:text-teal-600 transition-colors">
+          <svg id="save-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+          <span id="save-label">Save job</span>
         </button>
-        <button class="flex items-center gap-2 border border-gray-200 text-gray-600 text-sm font-medium px-4 py-2.5 rounded-xl hover:border-gray-400 transition-colors">
+        <button id="share-btn" class="flex items-center gap-2 border border-gray-200 text-gray-600 text-sm font-medium px-4 py-2.5 rounded-xl hover:border-gray-400 transition-colors">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
           Share
         </button>
@@ -337,6 +337,129 @@
   <footer class="bg-white border-t border-gray-100 mt-10 py-8 px-4 text-center">
     <p class="text-sm text-gray-400">© 2026 WorkNest Ltd · <a href="index.html" class="hover:text-teal-600">Home</a> · <a href="jobs.html" class="hover:text-teal-600">Browse Jobs</a> · <a href="employers.html" class="hover:text-teal-600">For Employers</a></p>
   </footer>
+
+  <script>
+  (function () {
+    // ── Childcare Calculator ──────────────────────────────────────────────────
+    const salaryInput = document.getElementById('salary');
+    const childrenSelect = document.getElementById('children');
+    const calcResult = document.getElementById('calc-result');
+    const calcNote = document.getElementById('calc-childcare-note');
+
+    function calcTakeHome(annualGross, numChildren) {
+      const PA = 12570;       // Personal allowance
+      const BR_LIMIT = 50270; // Basic rate upper limit
+      const HR_LIMIT = 125140;
+
+      // Income tax
+      let tax = 0;
+      if (annualGross > PA) {
+        const basicTaxable = Math.min(annualGross, BR_LIMIT) - PA;
+        tax += basicTaxable * 0.20;
+      }
+      if (annualGross > BR_LIMIT) {
+        const higherTaxable = Math.min(annualGross, HR_LIMIT) - BR_LIMIT;
+        tax += higherTaxable * 0.40;
+      }
+
+      // Employee NI (Class 1)
+      let ni = 0;
+      if (annualGross > PA) {
+        const ni1 = Math.min(annualGross, BR_LIMIT) - PA;
+        ni += ni1 * 0.08;
+      }
+      if (annualGross > BR_LIMIT) {
+        ni += (annualGross - BR_LIMIT) * 0.02;
+      }
+
+      const monthlyNet = (annualGross - tax - ni) / 12;
+
+      // Childcare cost estimate (UK average, after free 15-30hr entitlement)
+      const childcareCosts = [0, 800, 1600, 2400];
+      const childcareCost = childcareCosts[Math.min(numChildren, 3)];
+
+      return { monthlyNet, childcareCost, takeHome: monthlyNet - childcareCost };
+    }
+
+    function updateCalc() {
+      const gross = parseInt(salaryInput.value) || 0;
+      const children = parseInt(childrenSelect.value) || 0;
+      const { monthlyNet, childcareCost, takeHome } = calcTakeHome(gross, children);
+
+      calcResult.textContent = '£' + Math.max(0, Math.round(takeHome)).toLocaleString('en-GB');
+
+      if (childcareCost === 0) {
+        calcNote.textContent = 'monthly take-home (no childcare costs)';
+      } else {
+        calcNote.textContent = 'after ~£' + childcareCost.toLocaleString('en-GB') + ' childcare/mo';
+      }
+    }
+
+    salaryInput.addEventListener('input', updateCalc);
+    childrenSelect.addEventListener('change', updateCalc);
+    updateCalc(); // init
+
+    // ── Save Job ──────────────────────────────────────────────────────────────
+    const saveBtn = document.getElementById('save-btn');
+    const saveIcon = document.getElementById('save-icon');
+    const saveLabel = document.getElementById('save-label');
+    const JOB_KEY = 'saved_job_figma_senior_designer';
+
+    function updateSaveState(saved) {
+      if (saved) {
+        saveIcon.setAttribute('fill', '#0d9488');
+        saveIcon.setAttribute('stroke', '#0d9488');
+        saveLabel.textContent = 'Saved';
+        saveBtn.classList.add('border-teal-400', 'text-teal-600');
+        saveBtn.classList.remove('border-gray-200', 'text-gray-600');
+      } else {
+        saveIcon.setAttribute('fill', 'none');
+        saveIcon.setAttribute('stroke', 'currentColor');
+        saveLabel.textContent = 'Save job';
+        saveBtn.classList.remove('border-teal-400', 'text-teal-600');
+        saveBtn.classList.add('border-gray-200', 'text-gray-600');
+      }
+    }
+
+    // Restore from localStorage
+    updateSaveState(localStorage.getItem(JOB_KEY) === 'true');
+
+    saveBtn.addEventListener('click', () => {
+      const isSaved = localStorage.getItem(JOB_KEY) === 'true';
+      localStorage.setItem(JOB_KEY, String(!isSaved));
+      updateSaveState(!isSaved);
+      showToast(isSaved ? 'Job removed from saved list' : '❤️ Job saved! Find it in your account.');
+    });
+
+    // ── Share ─────────────────────────────────────────────────────────────────
+    document.getElementById('share-btn').addEventListener('click', () => {
+      const url = window.location.href;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(() => showToast('🔗 Link copied to clipboard!'));
+      } else {
+        // Fallback for browsers without clipboard API
+        const ta = document.createElement('textarea');
+        ta.value = url;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+        showToast('🔗 Link copied to clipboard!');
+      }
+    });
+
+    // ── Toast ─────────────────────────────────────────────────────────────────
+    function showToast(msg) {
+      const t = document.createElement('div');
+      t.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-sm font-medium px-5 py-3 rounded-xl shadow-xl z-50 transition-opacity duration-300';
+      t.textContent = msg;
+      document.body.appendChild(t);
+      setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 300); }, 3500);
+    }
+  })();
+  </script>
 
 </body>
 </html>
