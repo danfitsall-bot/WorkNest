@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WorkNest — Find work that fits your family</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            teal: {
+              50: '#f0fdfa', 100: '#ccfbf1', 200: '#99f6e4',
+              300: '#5eead4', 400: '#2dd4bf', 500: '#14b8a6',
+              600: '#0d9488', 700: '#0f766e', 800: '#115e59', 900: '#134e4a'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', sans-serif; background: #FAFAF8; }
+    .gradient-hero {
+      background: linear-gradient(135deg, #0D9488 0%, #0F766E 40%, #134E4A 100%);
+    }
+    .tag-remote { background: #DBEAFE; color: #1D4ED8; }
+    .tag-school { background: #D1FAE5; color: #065F46; }
+    .tag-fourday { background: #EDE9FE; color: #6D28D9; }
+    .tag-termtime { background: #FEF3C7; color: #92400E; }
+    .tag-jobshare { background: #FCE7F3; color: #9D174D; }
+    .tag-async { background: #E0F2FE; color: #0C4A6E; }
+    .card-hover { transition: all 0.2s ease; }
+    .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); }
+  </style>
+</head>
+<body class="text-gray-900">
+
+  <!-- NAVBAR -->
+  <nav class="bg-white border-b border-gray-100 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo -->
+        <a href="index.html" class="flex items-center gap-2">
+          <div class="w-8 h-8 bg-teal-600 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a8 8 0 100 16A8 8 0 0010 2zm0 1.5a6.5 6.5 0 110 13 6.5 6.5 0 010-13zm0 2a1 1 0 00-1 1v3.586l-1.707 1.707a1 1 0 001.414 1.414L10.707 11A1 1 0 0011 10.293V6.5a1 1 0 00-1-1z"/>
+            </svg>
+          </div>
+          <span class="font-bold text-xl text-gray-900">WorkNest</span>
+        </a>
+
+        <!-- Nav Links -->
+        <div class="hidden md:flex items-center gap-6">
+          <a href="jobs.html" class="text-sm font-medium text-gray-600 hover:text-teal-600 transition-colors">Browse Jobs</a>
+          <a href="employers.html" class="text-sm font-medium text-gray-600 hover:text-teal-600 transition-colors">For Employers</a>
+          <a href="#" class="text-sm font-medium text-gray-600 hover:text-teal-600 transition-colors">Resources</a>
+        </div>
+
+        <!-- Auth -->
+        <div class="flex items-center gap-3">
+          <a href="#" class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">Sign in</a>
+          <a href="employers.html" class="bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors">
+            Post a Job
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="gradient-hero text-white py-20 px-4">
+    <div class="max-w-4xl mx-auto text-center">
+      <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 text-sm font-medium mb-6">
+        <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+        2,400+ flexible jobs available now
+      </div>
+      <h1 class="text-5xl sm:text-6xl font-extrabold leading-tight tracking-tight mb-4">
+        Work that fits<br /><span class="text-teal-200">your family</span>
+      </h1>
+      <p class="text-xl text-teal-100 max-w-2xl mx-auto mb-10 leading-relaxed">
+        Parent-first jobs with real flexibility. School-hours, remote, 4-day weeks — from companies that actually mean it.
+      </p>
+
+      <!-- Search bar -->
+      <div class="bg-white rounded-2xl p-2 max-w-2xl mx-auto flex gap-2 shadow-xl">
+        <div class="flex-1 flex items-center gap-2 px-3">
+          <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+          <input type="text" placeholder="Job title, keyword, company..." class="w-full text-gray-900 text-sm outline-none placeholder-gray-400" />
+        </div>
+        <div class="border-l border-gray-200 flex items-center gap-2 px-3">
+          <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+          </svg>
+          <input type="text" placeholder="Location or remote" class="w-36 text-gray-900 text-sm outline-none placeholder-gray-400" />
+        </div>
+        <a href="jobs.html" class="bg-teal-600 hover:bg-teal-700 text-white font-semibold px-5 py-2.5 rounded-xl transition-colors text-sm">
+          Search Jobs
+        </a>
+      </div>
+
+      <!-- Quick filters -->
+      <div class="flex flex-wrap justify-center gap-2 mt-6">
+        <a href="jobs.html?filter=remote" class="bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white text-xs font-medium px-3 py-1.5 rounded-full transition-colors cursor-pointer">🌐 Remote</a>
+        <a href="jobs.html?filter=school_hours" class="bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white text-xs font-medium px-3 py-1.5 rounded-full transition-colors cursor-pointer">🕐 School Hours</a>
+        <a href="jobs.html?filter=four_day" class="bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white text-xs font-medium px-3 py-1.5 rounded-full transition-colors cursor-pointer">📅 4-Day Week</a>
+        <a href="jobs.html?filter=term_time" class="bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white text-xs font-medium px-3 py-1.5 rounded-full transition-colors cursor-pointer">🗓 Term-Time</a>
+        <a href="jobs.html?filter=part_time" class="bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white text-xs font-medium px-3 py-1.5 rounded-full transition-colors cursor-pointer">⏱ Part-Time</a>
+        <a href="jobs.html?filter=job_share" class="bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white text-xs font-medium px-3 py-1.5 rounded-full transition-colors cursor-pointer">👥 Job Share</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST BAR -->
+  <section class="bg-white border-b border-gray-100 py-4">
+    <div class="max-w-5xl mx-auto px-4 flex flex-wrap justify-center gap-8 text-sm text-gray-500">
+      <div class="flex items-center gap-2"><span class="font-bold text-teal-600 text-lg">2,400+</span> flexible jobs</div>
+      <div class="w-px bg-gray-200 hidden sm:block"></div>
+      <div class="flex items-center gap-2"><span class="font-bold text-teal-600 text-lg">850+</span> parent-friendly employers</div>
+      <div class="w-px bg-gray-200 hidden sm:block"></div>
+      <div class="flex items-center gap-2"><span class="font-bold text-teal-600 text-lg">94%</span> genuinely flexible roles</div>
+      <div class="w-px bg-gray-200 hidden sm:block"></div>
+      <div class="flex items-center gap-2">✅ Free to browse</div>
+    </div>
+  </section>
+
+  <!-- FEATURED JOBS -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h2 class="text-2xl font-bold text-gray-900">Featured Jobs</h2>
+        <p class="text-gray-500 text-sm mt-1">Hand-picked flexible roles from verified employers</p>
+      </div>
+      <a href="jobs.html" class="text-sm font-semibold text-teal-600 hover:text-teal-700 flex items-center gap-1">
+        View all jobs
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+
+    <!-- Job Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+      <!-- Job Card 1 -->
+      <a href="job.html" class="card-hover bg-white rounded-2xl border border-gray-100 p-5 block shadow-sm">
+        <div class="flex items-start justify-between mb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-xl bg-blue-100 flex items-center justify-center text-lg">🔷</div>
+            <div>
+              <p class="text-sm font-semibold text-gray-900">Figma</p>
+              <p class="text-xs text-gray-400">Software</p>
+            </div>
+          </div>
+          <span class="bg-orange-50 text-orange-600 text-xs font-semibold px-2.5 py-1 rounded-full">Featured</span>
+        </div>
+        <h3 class="font-semibold text-gray-900 mb-1">Senior Product Designer</h3>
+        <p class="text-sm text-gray-500 mb-4">London · £65,000–£80,000/yr</p>
+        <div class="flex flex-wrap gap-1.5 mb-4">
+          <span class="tag-remote text-xs font-medium px-2.5 py-1 rounded-full">🌐 Remote</span>
+          <span class="tag-fourday text-xs font-medium px-2.5 py-1 rounded-full">📅 4-Day Week</span>
+        </div>
+        <div class="flex items-center justify-between text-xs text-gray-400">
+          <span>Posted 2 days ago</span>
+          <span class="flex items-center gap-1">
+            <svg class="w-3.5 h-3.5 text-teal-500" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+            </svg>
+            Parent Friendly
+          </span>
+        </div>
+      </a>
+
+      <!-- Job Card 2 -->
+      <a href="job.html" class="card-hover bg-white rounded-2xl border border-gray-100 p-5 block shadow-sm">
+        <div class="flex items-start justify-between mb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-xl bg-green-100 flex items-center justify-center text-lg">🌿</div>
+            <div>
+              <p class="text-sm font-semibold text-gray-900">Monzo</p>
+              <p class="text-xs text-gray-400">Fintech</p>
+            </div>
+          </div>
+          <span class="bg-teal-50 text-teal-700 text-xs font-semibold px-2.5 py-1 rounded-full">New</span>
+        </div>
+        <h3 class="font-semibold text-gray-900 mb-1">Marketing Manager (Part-Time)</h3>
+        <p class="text-sm text-gray-500 mb-4">Remote · £35,000–£42,000/yr (pro rata)</p>
+        <div class="flex flex-wrap gap-1.5 mb-4">
+          <span class="tag-remote text-xs font-medium px-2.5 py-1 rounded-full">🌐 Remote</span>
+          <span class="tag-school text-xs font-medium px-2.5 py-1 rounded-full">🕐 School Hours</span>
+        </div>
+        <div class="flex items-center justify-between text-xs text-gray-400">
+          <span>Posted today</span>
+          <span class="flex items-center gap-1">
+            <svg class="w-3.5 h-3.5 text-teal-500" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+            </svg>
+            Parent Friendly
+          </span>
+        </div>
+      </a>
+
+      <!-- Job Card 3 -->
+      <a href="job.html" class="card-hover bg-white rounded-2xl border border-gray-100 p-5 block shadow-sm">
+        <div class="flex items-start justify-between mb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-xl bg-purple-100 flex items-center justify-center text-lg">💜</div>
+            <div>
+              <p class="text-sm font-semibold text-gray-900">Notion</p>
+              <p class="text-xs text-gray-400">SaaS</p>
+            </div>
+          </div>
+        </div>
+        <h3 class="font-semibold text-gray-900 mb-1">Customer Success Lead</h3>
+        <p class="text-sm text-gray-500 mb-4">Remote · £40,000–£50,000/yr</p>
+        <div class="flex flex-wrap gap-1.5 mb-4">
+          <span class="tag-async text-xs font-medium px-2.5 py-1 rounded-full">⚡ Async</span>
+          <span class="tag-fourday text-xs font-medium px-2.5 py-1 rounded-full">📅 4-Day Week</span>
+        </div>
+        <div class="flex items-center justify-between text-xs text-gray-400">
+          <span>Posted 5 days ago</span>
+          <span>12 applicants</span>
+        </div>
+      </a>
+
+      <!-- Job Card 4 -->
+      <a href="job.html" class="card-hover bg-white rounded-2xl border border-gray-100 p-5 block shadow-sm">
+        <div class="flex items-start justify-between mb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-xl bg-yellow-100 flex items-center justify-center text-lg">⚡</div>
+            <div>
+              <p class="text-sm font-semibold text-gray-900">Octopus Energy</p>
+              <p class="text-xs text-gray-400">Energy</p>
+            </div>
+          </div>
+          <span class="bg-orange-50 text-orange-600 text-xs font-semibold px-2.5 py-1 rounded-full">Featured</span>
+        </div>
+        <h3 class="font-semibold text-gray-900 mb-1">UX Researcher</h3>
+        <p class="text-sm text-gray-500 mb-4">London / Remote · £55,000/yr</p>
+        <div class="flex flex-wrap gap-1.5 mb-4">
+          <span class="tag-remote text-xs font-medium px-2.5 py-1 rounded-full">🌐 Hybrid</span>
+          <span class="tag-termtime text-xs font-medium px-2.5 py-1 rounded-full">🗓 Term-Time</span>
+        </div>
+        <div class="flex items-center justify-between text-xs text-gray-400">
+          <span>Posted 1 day ago</span>
+          <span class="flex items-center gap-1">
+            <svg class="w-3.5 h-3.5 text-teal-500" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+            </svg>
+            Parent Friendly
+          </span>
+        </div>
+      </a>
+
+      <!-- Job Card 5 -->
+      <a href="job.html" class="card-hover bg-white rounded-2xl border border-gray-100 p-5 block shadow-sm">
+        <div class="flex items-start justify-between mb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-xl bg-red-100 flex items-center justify-center text-lg">🏦</div>
+            <div>
+              <p class="text-sm font-semibold text-gray-900">Revolut</p>
+              <p class="text-xs text-gray-400">Fintech</p>
+            </div>
+          </div>
+        </div>
+        <h3 class="font-semibold text-gray-900 mb-1">Data Analyst</h3>
+        <p class="text-sm text-gray-500 mb-4">Remote · £45,000–£55,000/yr</p>
+        <div class="flex flex-wrap gap-1.5 mb-4">
+          <span class="tag-remote text-xs font-medium px-2.5 py-1 rounded-full">🌐 Remote</span>
+          <span class="tag-school text-xs font-medium px-2.5 py-1 rounded-full">🕐 School Hours</span>
+          <span class="tag-jobshare text-xs font-medium px-2.5 py-1 rounded-full">👥 Job Share</span>
+        </div>
+        <div class="flex items-center justify-between text-xs text-gray-400">
+          <span>Posted 3 days ago</span>
+          <span>8 applicants</span>
+        </div>
+      </a>
+
+      <!-- Job Card 6 -->
+      <a href="job.html" class="card-hover bg-white rounded-2xl border border-gray-100 p-5 block shadow-sm">
+        <div class="flex items-start justify-between mb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-xl bg-teal-100 flex items-center justify-center text-lg">🌱</div>
+            <div>
+              <p class="text-sm font-semibold text-gray-900">Calm</p>
+              <p class="text-xs text-gray-400">Wellness</p>
+            </div>
+          </div>
+          <span class="bg-teal-50 text-teal-700 text-xs font-semibold px-2.5 py-1 rounded-full">New</span>
+        </div>
+        <h3 class="font-semibold text-gray-900 mb-1">Content Strategist</h3>
+        <p class="text-sm text-gray-500 mb-4">Remote · £38,000–£48,000/yr</p>
+        <div class="flex flex-wrap gap-1.5 mb-4">
+          <span class="tag-async text-xs font-medium px-2.5 py-1 rounded-full">⚡ Async</span>
+          <span class="tag-remote text-xs font-medium px-2.5 py-1 rounded-full">🌐 Remote</span>
+        </div>
+        <div class="flex items-center justify-between text-xs text-gray-400">
+          <span>Posted today</span>
+          <span class="flex items-center gap-1">
+            <svg class="w-3.5 h-3.5 text-teal-500" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+            </svg>
+            Parent Friendly
+          </span>
+        </div>
+      </a>
+
+    </div>
+
+    <div class="text-center mt-8">
+      <a href="jobs.html" class="inline-flex items-center gap-2 border border-gray-200 text-gray-700 font-semibold px-6 py-3 rounded-xl hover:border-teal-600 hover:text-teal-600 transition-colors text-sm">
+        Browse all 2,400+ jobs
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- WHY WORKNEST -->
+  <section class="bg-white py-16 border-y border-gray-100">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center">
+      <h2 class="text-3xl font-bold text-gray-900 mb-2">Built for real life</h2>
+      <p class="text-gray-500 mb-12 max-w-xl mx-auto">Every job on WorkNest is verified for genuine flexibility — no bait-and-switch, no ambiguous "occasional flexibility".</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="text-center">
+          <div class="w-14 h-14 bg-teal-50 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">🏡</div>
+          <h3 class="font-semibold text-gray-900 mb-2">Genuinely flexible</h3>
+          <p class="text-sm text-gray-500">We verify flexibility claims directly with employers. If a job says school hours — it means school hours.</p>
+        </div>
+        <div class="text-center">
+          <div class="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">✅</div>
+          <h3 class="font-semibold text-gray-900 mb-2">Career-gap friendly</h3>
+          <p class="text-sm text-gray-500">Every employer on WorkNest explicitly welcomes returners. Your career break is a strength, not a gap to explain away.</p>
+        </div>
+        <div class="text-center">
+          <div class="w-14 h-14 bg-purple-50 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">💰</div>
+          <h3 class="font-semibold text-gray-900 mb-2">Salary transparency</h3>
+          <p class="text-sm text-gray-500">Every listing shows salary upfront. We even show you take-home pay after estimated childcare costs.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PARENT FRIENDLY BADGE SECTION -->
+  <section class="py-16 px-4">
+    <div class="max-w-5xl mx-auto">
+      <div class="bg-gradient-to-br from-teal-600 to-teal-800 rounded-3xl p-8 md:p-12 text-white flex flex-col md:flex-row items-center gap-8">
+        <div class="flex-1">
+          <div class="inline-flex items-center gap-2 bg-white/10 rounded-full px-3 py-1 text-sm font-medium mb-4">
+            ✅ Verified Badge Programme
+          </div>
+          <h2 class="text-3xl font-bold mb-3">Parent Friendly Employer</h2>
+          <p class="text-teal-100 text-base leading-relaxed mb-6">
+            Our certification programme verifies companies that genuinely support working parents. Flexible policies, not just flexible words.
+          </p>
+          <a href="employers.html" class="inline-flex items-center gap-2 bg-white text-teal-700 font-semibold px-5 py-2.5 rounded-xl hover:bg-teal-50 transition-colors text-sm">
+            Get certified
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+        <div class="grid grid-cols-2 gap-3 flex-shrink-0">
+          <div class="bg-white/10 rounded-2xl p-4 text-center">
+            <p class="text-2xl font-bold">850+</p>
+            <p class="text-teal-200 text-xs mt-1">Certified companies</p>
+          </div>
+          <div class="bg-white/10 rounded-2xl p-4 text-center">
+            <p class="text-2xl font-bold">4.8★</p>
+            <p class="text-teal-200 text-xs mt-1">Avg employer rating</p>
+          </div>
+          <div class="bg-white/10 rounded-2xl p-4 text-center">
+            <p class="text-2xl font-bold">100%</p>
+            <p class="text-teal-200 text-xs mt-1">Salary shown upfront</p>
+          </div>
+          <div class="bg-white/10 rounded-2xl p-4 text-center">
+            <p class="text-2xl font-bold">3 days</p>
+            <p class="text-teal-200 text-xs mt-1">Avg time to apply</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section class="bg-gray-50 border-y border-gray-100 py-14 px-4">
+    <div class="max-w-xl mx-auto text-center">
+      <div class="text-2xl mb-3">📬</div>
+      <h2 class="text-2xl font-bold text-gray-900 mb-2">Get the best flexible jobs weekly</h2>
+      <p class="text-gray-500 text-sm mb-6">Curated every Thursday. Flexible, remote, parent-friendly roles delivered to your inbox. No spam.</p>
+      <div class="flex gap-2 max-w-sm mx-auto">
+        <input type="email" placeholder="you@email.com" class="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent" />
+        <button class="bg-teal-600 hover:bg-teal-700 text-white font-semibold px-4 py-2.5 rounded-xl text-sm transition-colors">
+          Subscribe
+        </button>
+      </div>
+      <p class="text-xs text-gray-400 mt-3">Join 18,000+ parents already subscribed · Unsubscribe anytime</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-gray-100 py-12 px-4">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
+        <div class="col-span-2 md:col-span-1">
+          <div class="flex items-center gap-2 mb-3">
+            <div class="w-7 h-7 bg-teal-600 rounded-lg flex items-center justify-center">
+              <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 2a8 8 0 100 16A8 8 0 0010 2zm0 1.5a6.5 6.5 0 110 13 6.5 6.5 0 010-13zm0 2a1 1 0 00-1 1v3.586l-1.707 1.707a1 1 0 001.414 1.414L10.707 11A1 1 0 0011 10.293V6.5a1 1 0 00-1-1z"/>
+              </svg>
+            </div>
+            <span class="font-bold text-gray-900">WorkNest</span>
+          </div>
+          <p class="text-sm text-gray-500">The job board built for parents. Find work that works for your family.</p>
+        </div>
+        <div>
+          <p class="font-semibold text-sm text-gray-900 mb-3">Job Seekers</p>
+          <ul class="space-y-2 text-sm text-gray-500">
+            <li><a href="jobs.html" class="hover:text-teal-600">Browse Jobs</a></li>
+            <li><a href="#" class="hover:text-teal-600">Remote Jobs</a></li>
+            <li><a href="#" class="hover:text-teal-600">Part-Time Jobs</a></li>
+            <li><a href="#" class="hover:text-teal-600">Career Resources</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="font-semibold text-sm text-gray-900 mb-3">Employers</p>
+          <ul class="space-y-2 text-sm text-gray-500">
+            <li><a href="employers.html" class="hover:text-teal-600">Post a Job</a></li>
+            <li><a href="employers.html" class="hover:text-teal-600">Pricing</a></li>
+            <li><a href="employers.html" class="hover:text-teal-600">Parent Friendly Badge</a></li>
+            <li><a href="#" class="hover:text-teal-600">Talent Search</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="font-semibold text-sm text-gray-900 mb-3">Company</p>
+          <ul class="space-y-2 text-sm text-gray-500">
+            <li><a href="#" class="hover:text-teal-600">About</a></li>
+            <li><a href="#" class="hover:text-teal-600">Blog</a></li>
+            <li><a href="#" class="hover:text-teal-600">Privacy</a></li>
+            <li><a href="#" class="hover:text-teal-600">Terms</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-gray-100 pt-6 flex items-center justify-between text-xs text-gray-400">
+        <p>© 2026 WorkNest Ltd. All rights reserved.</p>
+        <p>Made with ❤️ for working parents</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

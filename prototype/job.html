@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Senior Product Designer — Figma — WorkNest</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            teal: {
+              50: '#f0fdfa', 100: '#ccfbf1', 200: '#99f6e4',
+              500: '#14b8a6', 600: '#0d9488', 700: '#0f766e', 800: '#115e59', 900: '#134e4a'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', sans-serif; background: #FAFAF8; }
+    .tag-remote { background: #DBEAFE; color: #1D4ED8; }
+    .tag-school { background: #D1FAE5; color: #065F46; }
+    .tag-fourday { background: #EDE9FE; color: #6D28D9; }
+    .tag-termtime { background: #FEF3C7; color: #92400E; }
+    .tag-jobshare { background: #FCE7F3; color: #9D174D; }
+    .tag-async { background: #E0F2FE; color: #0C4A6E; }
+    .prose p { margin-bottom: 1rem; }
+    .prose h3 { font-weight: 600; margin-bottom: 0.5rem; margin-top: 1.5rem; color: #111827; }
+    .prose ul { list-style: disc; padding-left: 1.5rem; margin-bottom: 1rem; }
+    .prose ul li { margin-bottom: 0.4rem; color: #374151; }
+    .salary-calc { transition: all 0.2s ease; }
+  </style>
+</head>
+<body class="text-gray-900">
+
+  <!-- NAVBAR -->
+  <nav class="bg-white border-b border-gray-100 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <a href="index.html" class="flex items-center gap-2">
+          <div class="w-8 h-8 bg-teal-600 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a8 8 0 100 16A8 8 0 0010 2zm0 1.5a6.5 6.5 0 110 13 6.5 6.5 0 010-13zm0 2a1 1 0 00-1 1v3.586l-1.707 1.707a1 1 0 001.414 1.414L10.707 11A1 1 0 0011 10.293V6.5a1 1 0 00-1-1z"/>
+            </svg>
+          </div>
+          <span class="font-bold text-xl text-gray-900">WorkNest</span>
+        </a>
+        <div class="hidden md:flex items-center gap-6">
+          <a href="jobs.html" class="text-sm font-medium text-gray-600 hover:text-teal-600 transition-colors">Browse Jobs</a>
+          <a href="employers.html" class="text-sm font-medium text-gray-600 hover:text-teal-600 transition-colors">For Employers</a>
+        </div>
+        <div class="flex items-center gap-3">
+          <a href="#" class="text-sm font-medium text-gray-600 hover:text-gray-900">Sign in</a>
+          <a href="employers.html" class="bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors">Post a Job</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <div class="bg-white border-b border-gray-100 px-4 py-3">
+    <div class="max-w-7xl mx-auto flex items-center gap-2 text-sm text-gray-500">
+      <a href="jobs.html" class="hover:text-teal-600 transition-colors">Jobs</a>
+      <svg class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      <span>Design</span>
+      <svg class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      <span class="text-gray-700">Senior Product Designer</span>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex gap-8">
+
+    <!-- JOB CONTENT -->
+    <main class="flex-1 min-w-0">
+
+      <!-- Job Header Card -->
+      <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm mb-5">
+        <div class="flex items-start gap-4">
+          <div class="w-16 h-16 rounded-2xl bg-blue-100 flex items-center justify-center text-3xl flex-shrink-0">🔷</div>
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-1">
+              <h1 class="text-xl font-bold text-gray-900">Senior Product Designer</h1>
+              <span class="bg-orange-100 text-orange-600 text-xs font-semibold px-2.5 py-1 rounded-full">Featured</span>
+            </div>
+            <a href="#" class="text-teal-600 font-semibold hover:underline text-sm">Figma</a>
+            <span class="text-gray-400 text-sm"> · London (Remote first)</span>
+
+            <div class="flex flex-wrap gap-2 mt-3">
+              <span class="tag-remote text-xs font-medium px-3 py-1.5 rounded-full">🌐 Remote</span>
+              <span class="tag-fourday text-xs font-medium px-3 py-1.5 rounded-full">📅 4-Day Week</span>
+              <span class="flex items-center gap-1 text-xs text-teal-700 bg-teal-50 px-3 py-1.5 rounded-full font-medium">
+                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                Parent Friendly Certified
+              </span>
+            </div>
+
+            <div class="flex flex-wrap gap-5 mt-4 text-sm text-gray-500">
+              <div class="flex items-center gap-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                £65,000–£80,000/yr
+              </div>
+              <div class="flex items-center gap-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+                London / Remote
+              </div>
+              <div class="flex items-center gap-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Full-time, 4 days/week
+              </div>
+              <div class="flex items-center gap-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                Closes 15 March 2026
+              </div>
+              <div class="text-gray-400">Posted 2 days ago · 24 views</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Childcare Cost Calculator -->
+      <div class="bg-gradient-to-br from-teal-50 to-teal-100/50 rounded-2xl border border-teal-100 p-5 mb-5">
+        <div class="flex items-start gap-3">
+          <span class="text-xl">🧮</span>
+          <div class="flex-1">
+            <h3 class="font-semibold text-teal-900 text-sm mb-1">Childcare Cost Calculator</h3>
+            <p class="text-xs text-teal-700 mb-3">See your take-home pay after estimated childcare costs</p>
+            <div class="flex flex-wrap items-end gap-3">
+              <div>
+                <label class="text-xs text-teal-700 font-medium block mb-1">Your salary</label>
+                <div class="flex items-center border border-teal-200 rounded-lg bg-white px-3 py-1.5 text-sm">
+                  <span class="text-gray-500 mr-1">£</span>
+                  <input type="number" id="salary" value="72500" class="w-20 outline-none text-gray-900" />
+                  <span class="text-gray-400 text-xs ml-1">/yr</span>
+                </div>
+              </div>
+              <div>
+                <label class="text-xs text-teal-700 font-medium block mb-1">Children in childcare</label>
+                <select id="children" class="border border-teal-200 rounded-lg bg-white px-3 py-1.5 text-sm outline-none text-gray-900">
+                  <option>0</option>
+                  <option selected>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                </select>
+              </div>
+              <div class="bg-white rounded-xl border border-teal-200 px-4 py-2 text-center salary-calc">
+                <p class="text-xs text-teal-600 font-medium">Est. monthly take-home</p>
+                <p class="text-xl font-bold text-teal-800">£3,847</p>
+                <p class="text-xs text-teal-500">after ~£800 childcare/mo</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Job Description -->
+      <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm mb-5">
+        <h2 class="font-bold text-gray-900 text-base mb-4">About the role</h2>
+        <div class="prose text-sm text-gray-600 leading-relaxed">
+          <p>We're looking for a Senior Product Designer to join Figma's product team. You'll work across core product surfaces, shaping the experience for millions of designers worldwide. This role is designed for someone who does their best thinking when they're not clock-watching.</p>
+
+          <h3>What flexibility actually looks like here</h3>
+          <p>This isn't "flexible working on request". Here's what we mean:</p>
+          <ul>
+            <li>4-day week is contractual — Fridays off, every week, no questions asked</li>
+            <li>Core hours are 10am–3pm — outside that, work when you're most effective</li>
+            <li>All meetings are recorded and transcribed for async review</li>
+            <li>School pickups, assemblies, sports days — just block your calendar</li>
+            <li>Childcare emergency? Slack your manager, sort your family, no admin required</li>
+          </ul>
+
+          <h3>What you'll be doing</h3>
+          <ul>
+            <li>Own end-to-end design for 1–2 major product areas</li>
+            <li>Collaborate with PMs and engineers from discovery through to shipping</li>
+            <li>Run user research sessions and synthesise findings into design decisions</li>
+            <li>Mentor junior designers and contribute to our design system</li>
+            <li>Present work to senior stakeholders and the wider team</li>
+          </ul>
+
+          <h3>What we're looking for</h3>
+          <ul>
+            <li>5+ years in product design, with strong portfolio of shipped work</li>
+            <li>Deep expertise in Figma (naturally)</li>
+            <li>Experience running user research independently</li>
+            <li>Strong written communication — you'll document your thinking clearly</li>
+            <li>Career returners: we actively encourage applications from parents returning after a break</li>
+          </ul>
+
+          <h3>Benefits</h3>
+          <ul>
+            <li>£65,000–£80,000 salary depending on experience</li>
+            <li>4-day working week (contractual)</li>
+            <li>Private healthcare (includes family cover)</li>
+            <li>£2,000/yr childcare support budget</li>
+            <li>£1,000 home office setup budget</li>
+            <li>25 days holiday + bank holidays</li>
+            <li>Enhanced parental leave — 26 weeks full pay for primary caregiver</li>
+            <li>EMI share options</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Share & Save -->
+      <div class="flex gap-3">
+        <button class="flex items-center gap-2 border border-gray-200 text-gray-600 text-sm font-medium px-4 py-2.5 rounded-xl hover:border-teal-400 hover:text-teal-600 transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+          Save job
+        </button>
+        <button class="flex items-center gap-2 border border-gray-200 text-gray-600 text-sm font-medium px-4 py-2.5 rounded-xl hover:border-gray-400 transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+          Share
+        </button>
+        <button class="flex items-center gap-2 border border-gray-200 text-gray-500 text-sm font-medium px-4 py-2.5 rounded-xl hover:border-red-300 hover:text-red-500 transition-colors ml-auto">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"/></svg>
+          Report listing
+        </button>
+      </div>
+    </main>
+
+    <!-- SIDEBAR -->
+    <aside class="hidden lg:block w-80 flex-shrink-0">
+
+      <!-- Apply Card (sticky) -->
+      <div class="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm mb-4 sticky top-24">
+        <div class="text-center mb-4">
+          <p class="text-2xl font-bold text-gray-900">£65k–£80k</p>
+          <p class="text-sm text-gray-500">per year · 4 days/week</p>
+        </div>
+        <a href="#" class="block w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold text-center py-3 rounded-xl transition-colors mb-3 text-sm">
+          Apply Now
+        </a>
+        <a href="#" class="block w-full border border-gray-200 hover:border-teal-400 text-gray-700 font-semibold text-center py-3 rounded-xl transition-colors text-sm">
+          Save for Later
+        </a>
+        <p class="text-center text-xs text-gray-400 mt-3">Closes 15 March 2026 · 24 views</p>
+
+        <!-- Quick facts -->
+        <div class="border-t border-gray-100 mt-4 pt-4 space-y-3">
+          <div class="flex items-center gap-3 text-sm">
+            <div class="w-8 h-8 bg-teal-50 rounded-lg flex items-center justify-center text-sm">🌐</div>
+            <div>
+              <p class="text-xs text-gray-400">Work style</p>
+              <p class="font-medium text-gray-700">Remote first</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 text-sm">
+            <div class="w-8 h-8 bg-purple-50 rounded-lg flex items-center justify-center text-sm">📅</div>
+            <div>
+              <p class="text-xs text-gray-400">Schedule</p>
+              <p class="font-medium text-gray-700">4-day week</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 text-sm">
+            <div class="w-8 h-8 bg-orange-50 rounded-lg flex items-center justify-center text-sm">⏰</div>
+            <div>
+              <p class="text-xs text-gray-400">Core hours</p>
+              <p class="font-medium text-gray-700">10am–3pm</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 text-sm">
+            <div class="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center text-sm">👶</div>
+            <div>
+              <p class="text-xs text-gray-400">Childcare support</p>
+              <p class="font-medium text-gray-700">£2,000/yr budget</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Company Card -->
+      <div class="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm mb-4">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-11 h-11 rounded-xl bg-blue-100 flex items-center justify-center text-xl">🔷</div>
+          <div>
+            <h3 class="font-semibold text-gray-900 text-sm">Figma</h3>
+            <p class="text-xs text-gray-500">Design software · 500–1,000 people</p>
+          </div>
+        </div>
+        <!-- Parent Friendly Badge -->
+        <div class="bg-teal-50 border border-teal-100 rounded-xl p-3 mb-3 flex items-center gap-2">
+          <svg class="w-5 h-5 text-teal-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+          </svg>
+          <div>
+            <p class="text-xs font-semibold text-teal-800">Parent Friendly Employer</p>
+            <p class="text-xs text-teal-600">Verified December 2025</p>
+          </div>
+        </div>
+        <p class="text-xs text-gray-600 leading-relaxed mb-3">Figma makes design accessible and collaborative. We're committed to building a workplace that genuinely works for parents — not just in words, but in practice.</p>
+        <div class="flex items-center justify-between text-xs text-gray-500 mb-3">
+          <span>⭐ 4.8/5 from 312 reviews</span>
+          <span>6 open roles</span>
+        </div>
+        <a href="#" class="text-sm text-teal-600 font-medium hover:underline">View company profile →</a>
+      </div>
+
+      <!-- Similar jobs -->
+      <div class="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
+        <h3 class="font-semibold text-gray-900 text-sm mb-4">Similar jobs</h3>
+        <div class="space-y-3">
+          <a href="#" class="block hover:bg-gray-50 rounded-xl p-2.5 -mx-2.5 transition-colors">
+            <p class="text-sm font-medium text-gray-900">UX Designer (Part-Time)</p>
+            <p class="text-xs text-gray-500 mt-0.5">Spotify · Remote · £45k–£55k</p>
+            <div class="flex gap-1 mt-1.5">
+              <span class="tag-remote text-xs px-2 py-0.5 rounded-full">Remote</span>
+              <span class="tag-school text-xs px-2 py-0.5 rounded-full">School hrs</span>
+            </div>
+          </a>
+          <a href="#" class="block hover:bg-gray-50 rounded-xl p-2.5 -mx-2.5 transition-colors border-t border-gray-50 pt-3">
+            <p class="text-sm font-medium text-gray-900">Product Design Lead</p>
+            <p class="text-xs text-gray-500 mt-0.5">Notion · Remote · £70k–£85k</p>
+            <div class="flex gap-1 mt-1.5">
+              <span class="tag-fourday text-xs px-2 py-0.5 rounded-full">4-day week</span>
+              <span class="tag-async text-xs px-2 py-0.5 rounded-full">Async</span>
+            </div>
+          </a>
+          <a href="#" class="block hover:bg-gray-50 rounded-xl p-2.5 -mx-2.5 transition-colors border-t border-gray-50 pt-3">
+            <p class="text-sm font-medium text-gray-900">Senior UI Designer</p>
+            <p class="text-xs text-gray-500 mt-0.5">Miro · Hybrid · £60k–£72k</p>
+            <div class="flex gap-1 mt-1.5">
+              <span class="tag-remote text-xs px-2 py-0.5 rounded-full">Hybrid</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- FOOTER (condensed) -->
+  <footer class="bg-white border-t border-gray-100 mt-10 py-8 px-4 text-center">
+    <p class="text-sm text-gray-400">© 2026 WorkNest Ltd · <a href="index.html" class="hover:text-teal-600">Home</a> · <a href="jobs.html" class="hover:text-teal-600">Browse Jobs</a> · <a href="employers.html" class="hover:text-teal-600">For Employers</a></p>
+  </footer>
+
+</body>
+</html>
