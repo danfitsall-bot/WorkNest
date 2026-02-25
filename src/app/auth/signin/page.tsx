@@ -1,11 +1,11 @@
 'use client'
 
 import { signIn } from 'next-auth/react'
-import { useState, FormEvent } from 'react'
+import { useState, FormEvent, Suspense } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 
-export default function SignInPage() {
+function SignInForm() {
   const router = useRouter()
   const params = useSearchParams()
   const callbackUrl = params.get('callbackUrl') ?? '/'
@@ -107,5 +107,13 @@ export default function SignInPage() {
         </p>
       </div>
     </div>
+  )
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense>
+      <SignInForm />
+    </Suspense>
   )
 }

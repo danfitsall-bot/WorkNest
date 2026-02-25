@@ -1,11 +1,11 @@
 'use client'
 
 import { signIn } from 'next-auth/react'
-import { useState, FormEvent } from 'react'
+import { useState, FormEvent, Suspense } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 
-export default function SignUpPage() {
+function SignUpForm() {
   const router = useRouter()
   const params = useSearchParams()
   const role = params.get('role') ?? 'SEEKER'
@@ -117,5 +117,13 @@ export default function SignUpPage() {
         </p>
       </div>
     </div>
+  )
+}
+
+export default function SignUpPage() {
+  return (
+    <Suspense>
+      <SignUpForm />
+    </Suspense>
   )
 }
