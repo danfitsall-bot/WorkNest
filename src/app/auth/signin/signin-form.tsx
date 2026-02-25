@@ -3,12 +3,10 @@
 import { signIn } from 'next-auth/react'
 import { useState, FormEvent } from 'react'
 import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
-export default function SignInForm() {
+export default function SignInForm({ callbackUrl }: { callbackUrl: string }) {
   const router = useRouter()
-  const params = useSearchParams()
-  const callbackUrl = params.get('callbackUrl') ?? '/'
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
