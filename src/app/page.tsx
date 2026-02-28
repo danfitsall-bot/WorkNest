@@ -63,7 +63,7 @@ export default async function HomePage() {
       {/* Hero */}
       <section className="bg-gradient-to-br from-teal-900 via-teal-800 to-teal-700 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
-          <div className="max-w-3xl">
+          <div className="max-w-4xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 bg-white/10 rounded-full px-4 py-1.5 text-sm font-medium mb-6">
               <span>🌿</span>
               <span>{stats.jobs.toLocaleString()}+ flexible jobs from {stats.companies}+ parent-friendly employers</span>
@@ -78,7 +78,7 @@ export default async function HomePage() {
             </p>
 
             {/* Search */}
-            <form action="/jobs" method="get" className="flex flex-col sm:flex-row gap-3 max-w-2xl">
+            <form action="/jobs" method="get" className="flex flex-col sm:flex-row gap-3 max-w-2xl mx-auto">
               <input
                 name="q"
                 type="text"
@@ -100,7 +100,7 @@ export default async function HomePage() {
             </form>
 
             {/* Quick filters */}
-            <div className="flex flex-wrap gap-2 mt-6">
+            <div className="flex flex-wrap justify-center gap-2 mt-6">
               {QUICK_FILTERS.map(f => (
                 <Link
                   key={f.label}
