@@ -9,11 +9,12 @@ interface Props {
   jobTitle: string
   company: string
   applyUrl: string | null
+  initialSaved?: boolean
 }
 
-export default function ApplySection({ jobId, jobTitle, company, applyUrl }: Props) {
+export default function ApplySection({ jobId, jobTitle, company, applyUrl, initialSaved = false }: Props) {
   const { data: session } = useSession()
-  const [saved, setSaved] = useState(false)
+  const [saved, setSaved] = useState(initialSaved)
   const [applied, setApplied] = useState(false)
   const [coverLetter, setCoverLetter] = useState('')
   const [showForm, setShowForm] = useState(false)
@@ -22,9 +23,10 @@ export default function ApplySection({ jobId, jobTitle, company, applyUrl }: Pro
 
   async function handleSave() {
     if (!session) return
-    setSaved(!saved)
+    const newSaved = !saved
+    setSaved(newSaved)
     await fetch('/api/saved-jobs', {
-      method: saved ? 'DELETE' : 'POST',
+      method: newSaved ? 'POST' : 'DELETE',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ jobId }),
     })
@@ -78,6 +80,7 @@ export default function ApplySection({ jobId, jobTitle, company, applyUrl }: Pro
               onChange={e => setCoverLetter(e.target.value)}
               placeholder="Tell them why you&apos;re a great fit (optional)…"
               rows={5}
+              maxLength={10000}
               className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
             />
             <button

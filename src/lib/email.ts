@@ -34,6 +34,19 @@ export async function sendJobAlertEmail(to: string, jobs: { title: string; compa
   })
 }
 
+export async function sendNewApplicantEmail(to: string, applicantName: string, jobTitle: string, jobId: string) {
+  await resend.emails.send({
+    from: FROM,
+    to,
+    subject: `New application — ${jobTitle}`,
+    html: `
+      <h1>New application received</h1>
+      <p><strong>${applicantName}</strong> has applied for <strong>${jobTitle}</strong>.</p>
+      <p><a href="${process.env.NEXT_PUBLIC_APP_URL}/employers/jobs/${jobId}/applicants">View applicants →</a></p>
+    `,
+  })
+}
+
 export async function sendApplicationConfirmEmail(to: string, jobTitle: string, company: string) {
   await resend.emails.send({
     from: FROM,

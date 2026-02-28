@@ -24,8 +24,8 @@ export default function Footer() {
             <ul className="space-y-2 text-sm">
               <li><Link href="/jobs" className="hover:text-white transition-colors">Browse Jobs</Link></li>
               <li><Link href="/jobs?remote=true" className="hover:text-white transition-colors">Remote Jobs</Link></li>
-              <li><Link href="/jobs?tag=school_hours" className="hover:text-white transition-colors">School Hours</Link></li>
-              <li><Link href="/jobs?tag=four_day" className="hover:text-white transition-colors">4-Day Week</Link></li>
+              <li><Link href="/jobs?tag=SCHOOL_HOURS" className="hover:text-white transition-colors">School Hours</Link></li>
+              <li><Link href="/jobs?tag=FOUR_DAY_WEEK" className="hover:text-white transition-colors">4-Day Week</Link></li>
               <li><Link href="/account" className="hover:text-white transition-colors">My Account</Link></li>
             </ul>
           </div>

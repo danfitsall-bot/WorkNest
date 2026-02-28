@@ -11,6 +11,7 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? 'https://worknest.co.uk'),
   title: {
     default: 'WorkNest — Flexible Jobs for Parents',
     template: '%s | WorkNest',
@@ -22,6 +23,13 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_GB',
     siteName: 'WorkNest',
+    title: 'WorkNest — Flexible Jobs for Parents',
+    description: 'The UK\'s most parent-friendly job board. Flexible, part-time, remote and family-first roles.',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'WorkNest — Flexible Jobs for Parents',
+    description: 'The UK\'s most parent-friendly job board.',
   },
 }
 

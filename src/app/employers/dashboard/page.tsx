@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
+import BillingPortalButton from './BillingPortalButton'
 
 function statusBadge(status: string) {
   const map: Record<string, string> = {
@@ -29,13 +30,15 @@ export default async function DashboardPage() {
     },
   })
 
-  // If no company, create a stub one so they can post jobs
   if (!company) {
     redirect('/employers/plans')
   }
 
   const totalApps = company.jobs.reduce((sum, j) => sum + j._count.applications, 0)
   const activeJobs = company.jobs.filter(j => j.status === 'ACTIVE').length
+  const isPastDue = company.subscriptionStatus === 'past_due'
+  const isCanceled = company.subscriptionStatus === 'canceled'
+  const hasBilling = !!company.stripeCustomerId
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -51,10 +54,35 @@ export default async function DashboardPage() {
             )}
           </p>
         </div>
-        <Link href="/employers/post-job" className="bg-coral-500 hover:bg-coral-600 text-white font-bold py-2.5 px-5 rounded-xl transition-colors">
-          + Post a Job
-        </Link>
+        <div className="flex items-center gap-3">
+          {hasBilling && <BillingPortalButton />}
+          <Link href="/employers/post-job" className="bg-coral-500 hover:bg-coral-600 text-white font-bold py-2.5 px-5 rounded-xl transition-colors">
+            + Post a Job
+          </Link>
+        </div>
       </div>
+
+      {/* Subscription warnings */}
+      {isPastDue && (
+        <div className="mb-6 bg-amber-50 border border-amber-200 rounded-2xl p-5 flex items-center justify-between">
+          <div>
+            <p className="font-semibold text-amber-900">Payment overdue</p>
+            <p className="text-amber-700 text-sm mt-0.5">Your last payment failed. Please update your payment method to keep your listings active.</p>
+          </div>
+          {hasBilling && <BillingPortalButton label="Update payment" />}
+        </div>
+      )}
+      {isCanceled && (
+        <div className="mb-6 bg-red-50 border border-red-200 rounded-2xl p-5 flex items-center justify-between">
+          <div>
+            <p className="font-semibold text-red-900">Subscription cancelled</p>
+            <p className="text-red-700 text-sm mt-0.5">Your plan has been downgraded to Free. Resubscribe to post more jobs and access premium features.</p>
+          </div>
+          <Link href="/employers/plans" className="bg-red-600 text-white font-semibold py-2 px-5 rounded-xl text-sm">
+            Resubscribe
+          </Link>
+        </div>
+      )}
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4 mb-8">
@@ -98,7 +126,9 @@ export default async function DashboardPage() {
                   <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${statusBadge(job.status)}`}>
                     {job.status}
                   </span>
-                  <span className="text-sm text-gray-500">{job._count.applications} applications</span>
+                  <Link href={`/employers/jobs/${job.id}/applicants`} className="text-sm text-gray-600 hover:text-teal-600 transition-colors">
+                    {job._count.applications} applicant{job._count.applications !== 1 ? 's' : ''}
+                  </Link>
                   <Link href={`/employers/jobs/${job.id}/edit`} className="text-teal-600 text-sm hover:underline">
                     Edit
                   </Link>
@@ -110,7 +140,7 @@ export default async function DashboardPage() {
       </div>
 
       {/* Plan upgrade nudge */}
-      {company.plan === 'FREE' && (
+      {company.plan === 'FREE' && !isCanceled && (
         <div className="mt-6 bg-teal-50 border border-teal-200 rounded-2xl p-5 flex items-center justify-between">
           <div>
             <p className="font-semibold text-teal-900">Upgrade to post more jobs</p>

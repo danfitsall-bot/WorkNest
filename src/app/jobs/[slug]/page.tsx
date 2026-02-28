@@ -1,5 +1,7 @@
 import { notFound } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import ApplySection from './ApplySection'
@@ -54,8 +56,21 @@ function officeDaysLabel(days: number): string {
 }
 
 export default async function JobDetailPage({ params }: Props) {
-  const job = await getJob(params.slug)
+  const [job, session] = await Promise.all([
+    getJob(params.slug),
+    getServerSession(authOptions),
+  ])
   if (!job || job.status !== 'ACTIVE') notFound()
+
+  // Check if current user has saved this job
+  let initialSaved = false
+  if (session?.user) {
+    const userId = (session.user as any).id
+    const savedJob = await prisma.savedJob.findUnique({
+      where: { userId_jobId: { userId, jobId: job.id } },
+    })
+    initialSaved = !!savedJob
+  }
 
   const salary = job.salaryMin && job.salaryMax
     ? `£${job.salaryMin.toLocaleString()} – £${job.salaryMax.toLocaleString()}`
@@ -192,7 +207,7 @@ export default async function JobDetailPage({ params }: Props) {
           {/* Sidebar */}
           <div className="space-y-4">
             {/* Apply card */}
-            <ApplySection jobId={job.id} jobTitle={job.title} company={job.company.name} applyUrl={job.applyUrl} />
+            <ApplySection jobId={job.id} jobTitle={job.title} company={job.company.name} applyUrl={job.applyUrl} initialSaved={initialSaved} />
 
             {/* Childcare calculator */}
             {job.salaryMin && (
