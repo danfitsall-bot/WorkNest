@@ -1,12 +1,21 @@
 'use client'
 
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useSession, signOut } from 'next-auth/react'
 import { useState } from 'react'
+
+function navClass(pathname: string, href: string) {
+  const active = href === '/' ? pathname === '/' : pathname.startsWith(href)
+  return active
+    ? 'text-teal-600 font-semibold transition-colors'
+    : 'text-gray-600 hover:text-teal-600 font-medium transition-colors'
+}
 
 export default function Navbar() {
   const { data: session } = useSession()
   const [mobileOpen, setMobileOpen] = useState(false)
+  const pathname = usePathname()
   const user = session?.user as any
 
   return (
@@ -25,22 +34,27 @@ export default function Navbar() {
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-6">
-            <Link href="/jobs" className="text-gray-600 hover:text-teal-600 font-medium transition-colors">
+            <Link href="/jobs" className={navClass(pathname, '/jobs')}>
               Find Jobs
             </Link>
-            <Link href="/employers" className="text-gray-600 hover:text-teal-600 font-medium transition-colors">
+            <Link href="/employers" className={navClass(pathname, '/employers')}>
               Employers
             </Link>
             {session ? (
               <>
                 {user?.role === 'EMPLOYER' && (
-                  <Link href="/employers/dashboard" className="text-gray-600 hover:text-teal-600 font-medium transition-colors">
+                  <Link href="/employers/dashboard" className={navClass(pathname, '/employers/dashboard')}>
                     Dashboard
                   </Link>
                 )}
                 {user?.role === 'SEEKER' && (
-                  <Link href="/account" className="text-gray-600 hover:text-teal-600 font-medium transition-colors">
+                  <Link href="/account" className={navClass(pathname, '/account')}>
                     My Jobs
+                  </Link>
+                )}
+                {user?.role === 'ADMIN' && (
+                  <Link href="/admin" className={navClass(pathname, '/admin')}>
+                    Admin
                   </Link>
                 )}
                 <button
@@ -87,22 +101,27 @@ export default function Navbar() {
         {/* Mobile Menu */}
         {mobileOpen && (
           <div className="md:hidden border-t border-gray-100 py-4 space-y-2">
-            <Link href="/jobs" className="block px-2 py-2 text-gray-700 hover:text-teal-600 font-medium" onClick={() => setMobileOpen(false)}>
+            <Link href="/jobs" className={`block px-2 py-2 ${navClass(pathname, '/jobs')}`} onClick={() => setMobileOpen(false)}>
               Find Jobs
             </Link>
-            <Link href="/employers" className="block px-2 py-2 text-gray-700 hover:text-teal-600 font-medium" onClick={() => setMobileOpen(false)}>
+            <Link href="/employers" className={`block px-2 py-2 ${navClass(pathname, '/employers')}`} onClick={() => setMobileOpen(false)}>
               Employers
             </Link>
             {session ? (
               <>
                 {user?.role === 'EMPLOYER' && (
-                  <Link href="/employers/dashboard" className="block px-2 py-2 text-gray-700 hover:text-teal-600 font-medium" onClick={() => setMobileOpen(false)}>
+                  <Link href="/employers/dashboard" className={`block px-2 py-2 ${navClass(pathname, '/employers/dashboard')}`} onClick={() => setMobileOpen(false)}>
                     Dashboard
                   </Link>
                 )}
                 {user?.role === 'SEEKER' && (
-                  <Link href="/account" className="block px-2 py-2 text-gray-700 hover:text-teal-600 font-medium" onClick={() => setMobileOpen(false)}>
+                  <Link href="/account" className={`block px-2 py-2 ${navClass(pathname, '/account')}`} onClick={() => setMobileOpen(false)}>
                     My Jobs
+                  </Link>
+                )}
+                {user?.role === 'ADMIN' && (
+                  <Link href="/admin" className={`block px-2 py-2 ${navClass(pathname, '/admin')}`} onClick={() => setMobileOpen(false)}>
+                    Admin
                   </Link>
                 )}
                 <button

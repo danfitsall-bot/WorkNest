@@ -99,10 +99,15 @@ export default function SignInForm({ callbackUrl }: { callbackUrl: string }) {
           </form>
         </div>
 
-        <p className="text-center text-sm text-gray-500 mt-6">
-          Don&apos;t have an account?{' '}
-          <Link href="/auth/signup" className="text-teal-600 font-medium hover:underline">Sign up free</Link>
-        </p>
+        <div className="text-center mt-6 space-y-2">
+          <p className="text-sm text-gray-500">
+            <Link href="/auth/forgot-password" className="text-teal-600 font-medium hover:underline">Forgot password?</Link>
+          </p>
+          <p className="text-sm text-gray-500">
+            Don&apos;t have an account?{' '}
+            <Link href="/auth/signup" className="text-teal-600 font-medium hover:underline">Sign up free</Link>
+          </p>
+        </div>
       </div>
     </div>
   )

@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
+import ProfileEditor from './ProfileEditor'
 
 const STATUS_STYLES: Record<string, string> = {
   PENDING: 'bg-gray-100 text-gray-600',
@@ -41,6 +42,11 @@ export default async function AccountPage() {
           <p className="text-gray-500 text-sm">{session.user?.email}</p>
         </div>
       </div>
+
+      {/* Profile */}
+      <section className="mb-10">
+        <ProfileEditor initialName={session.user?.name ?? ''} email={session.user?.email ?? ''} />
+      </section>
 
       {/* Applications */}
       <section className="mb-10">

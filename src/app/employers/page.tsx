@@ -145,7 +145,7 @@ export default function EmployersPage() {
                   ))}
                 </ul>
                 <Link
-                  href={plan.name === 'Enterprise' ? '#demo' : `/auth/signup?role=EMPLOYER&plan=${plan.name.toLowerCase()}`}
+                  href={plan.name === 'Enterprise' ? 'mailto:hello@worknest.co.uk?subject=Enterprise%20demo%20request' : `/auth/signup?role=EMPLOYER&plan=${plan.name.toLowerCase()}`}
                   className={`block w-full text-center font-semibold py-2.5 rounded-xl transition-colors ${
                     plan.popular
                       ? 'bg-teal-600 hover:bg-teal-700 text-white'
@@ -158,21 +158,15 @@ export default function EmployersPage() {
             ))}
           </div>
 
-          {/* One-off option */}
+          {/* Enterprise contact */}
           <div className="mt-8 max-w-5xl mx-auto bg-white rounded-2xl border border-gray-200 p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <h3 className="font-bold text-gray-900">Single job post</h3>
-              <p className="text-gray-500 text-sm mt-0.5">No subscription needed. Post one job for 30 days.</p>
+              <h3 className="font-bold text-gray-900">Need a custom plan?</h3>
+              <p className="text-gray-500 text-sm mt-0.5">Get in touch for bespoke pricing, onboarding, and dedicated support.</p>
             </div>
-            <div className="flex items-center gap-6">
-              <div>
-                <span className="text-2xl font-bold text-gray-900">£99</span>
-                <span className="text-gray-400 text-sm"> one-off</span>
-              </div>
-              <Link href="/auth/signup?role=EMPLOYER&plan=single" className="bg-coral-500 hover:bg-coral-600 text-white font-semibold py-2.5 px-6 rounded-xl transition-colors">
-                Post now
-              </Link>
-            </div>
+            <a href="mailto:hello@worknest.co.uk?subject=Enterprise%20enquiry" className="bg-coral-500 hover:bg-coral-600 text-white font-semibold py-2.5 px-6 rounded-xl transition-colors flex-shrink-0">
+              Contact us
+            </a>
           </div>
         </div>
       </section>

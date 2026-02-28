@@ -6,8 +6,18 @@ export default withAuth(
     const token = req.nextauth.token
     const path = req.nextUrl.pathname
 
+    // Admin-only routes
+    if (path.startsWith('/admin')) {
+      if (!token) {
+        return NextResponse.redirect(new URL('/auth/signin', req.url))
+      }
+      if (token.role !== 'ADMIN') {
+        return NextResponse.redirect(new URL('/', req.url))
+      }
+    }
+
     // Employer-only routes
-    if (path.startsWith('/employers/dashboard') || path.startsWith('/employers/post-job')) {
+    if (path.startsWith('/employers/dashboard') || path.startsWith('/employers/post-job') || path.startsWith('/employers/jobs')) {
       if (!token) {
         return NextResponse.redirect(new URL('/auth/signin', req.url))
       }
@@ -33,5 +43,5 @@ export default withAuth(
 )
 
 export const config = {
-  matcher: ['/employers/dashboard/:path*', '/employers/post-job/:path*', '/account/:path*'],
+  matcher: ['/admin/:path*', '/employers/dashboard/:path*', '/employers/post-job/:path*', '/employers/jobs/:path*', '/account/:path*'],
 }
