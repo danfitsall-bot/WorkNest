@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { prisma } from '@/lib/prisma'
 import JobCard from '@/components/JobCard'
 import NewsletterSignup from '@/components/NewsletterSignup'
@@ -41,12 +42,12 @@ const QUICK_FILTERS = [
 ]
 
 const EMPLOYERS = [
-  { name: 'Monzo', badge: true },
-  { name: 'Octopus Energy', badge: true },
-  { name: 'Deliveroo', badge: false },
-  { name: 'Bumble', badge: true },
-  { name: 'ASOS', badge: false },
-  { name: 'Spotify', badge: true },
+  { name: 'Monzo', domain: 'monzo.com', badge: true },
+  { name: 'Octopus Energy', domain: 'octopusenergy.com', badge: true },
+  { name: 'Deliveroo', domain: 'deliveroo.co.uk', badge: false },
+  { name: 'Bumble', domain: 'bumble.com', badge: true },
+  { name: 'ASOS', domain: 'asos.com', badge: false },
+  { name: 'Spotify', domain: 'spotify.com', badge: true },
 ]
 
 export default async function HomePage() {
@@ -168,14 +169,20 @@ export default async function HomePage() {
       {/* Trusted employers */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <p className="text-center text-sm font-medium text-gray-400 uppercase tracking-wider mb-8">Trusted by great employers</p>
-        <div className="flex flex-wrap justify-center items-center gap-8">
+        <div className="flex flex-wrap justify-center items-center gap-4">
           {EMPLOYERS.map(e => (
-            <div key={e.name} className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-xs font-bold text-gray-500">
-                {e.name[0]}
-              </div>
-              <span className="font-semibold text-gray-500">{e.name}</span>
-              {e.badge && <span className="text-xs bg-teal-50 text-teal-700 px-1.5 py-0.5 rounded-full">✓</span>}
+            <div key={e.name} className="flex flex-col items-center gap-2 bg-white rounded-2xl border border-gray-100 shadow-sm px-6 py-4 min-w-[96px]">
+              <Image
+                src={`https://logo.clearbit.com/${e.domain}`}
+                alt={`${e.name} logo`}
+                width={48}
+                height={48}
+                className="rounded-xl object-contain"
+              />
+              <span className="text-xs font-semibold text-gray-600 text-center leading-tight">{e.name}</span>
+              {e.badge && (
+                <span className="text-xs bg-teal-50 text-teal-700 px-1.5 py-0.5 rounded-full font-medium">✓ Certified</span>
+              )}
             </div>
           ))}
         </div>
