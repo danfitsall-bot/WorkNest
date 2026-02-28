@@ -44,7 +44,7 @@ export default function JobFilters({ current }: { current: Filters }) {
   const [q, setQ] = useState(current.q ?? '')
   const [location, setLocation] = useState(current.location ?? '')
   const [remote, setRemote] = useState(current.remote === 'true')
-  const [tag, setTag] = useState(current.tag ?? '')
+  const [tags, setTags] = useState<string[]>(current.tag ? current.tag.split(',') : [])
   const [hours, setHours] = useState(current.hours ?? '')
   const [sector, setSector] = useState(current.sector ?? '')
   const [salaryMin, setSalaryMin] = useState(current.salaryMin ?? '')
@@ -57,22 +57,28 @@ export default function JobFilters({ current }: { current: Filters }) {
     const merged = {
       q, location,
       remote: remote ? 'true' : '',
-      tag, hours, sector, salaryMin,
+      tag: tags.join(','), hours, sector, salaryMin,
       returnerFriendly: returnerFriendly ? 'true' : '',
       contractType, officeDaysMax,
       ...overrides,
     }
     Object.entries(merged).forEach(([k, v]) => { if (v) params[k] = v })
     router.push(`${pathname}?${new URLSearchParams(params)}`)
-  }, [q, location, remote, tag, hours, sector, salaryMin, returnerFriendly, contractType, officeDaysMax, router, pathname])
+  }, [q, location, remote, tags, hours, sector, salaryMin, returnerFriendly, contractType, officeDaysMax, router, pathname])
+
+  function toggleTag(value: string) {
+    const next = tags.includes(value) ? tags.filter(t => t !== value) : [...tags, value]
+    setTags(next)
+    apply({ tag: next.join(',') })
+  }
 
   function clearAll() {
-    setQ(''); setLocation(''); setRemote(false); setTag(''); setHours('')
+    setQ(''); setLocation(''); setRemote(false); setTags([]); setHours('')
     setSector(''); setSalaryMin(''); setReturnerFriendly(false); setContractType(''); setOfficeDaysMax('')
     router.push(pathname)
   }
 
-  const hasFilters = q || location || remote || tag || hours || sector || salaryMin || returnerFriendly || contractType || officeDaysMax
+  const hasFilters = q || location || remote || tags.length > 0 || hours || sector || salaryMin || returnerFriendly || contractType || officeDaysMax
 
   return (
     <div className="bg-white rounded-2xl border border-gray-100 p-5 space-y-6">
@@ -138,18 +144,16 @@ export default function JobFilters({ current }: { current: Filters }) {
           {FLEX_TAGS.map(t => (
             <label key={t.value} className="flex items-center gap-2 cursor-pointer py-0.5">
               <input
-                type="radio"
-                name="tag"
-                value={t.value}
-                checked={tag === t.value}
-                onChange={() => { setTag(t.value); apply({ tag: t.value }) }}
-                className="w-4 h-4 text-teal-600"
+                type="checkbox"
+                checked={tags.includes(t.value)}
+                onChange={() => toggleTag(t.value)}
+                className="w-4 h-4 text-teal-600 rounded"
               />
               <span className="text-sm text-gray-700">{t.icon} {t.label}</span>
             </label>
           ))}
-          {tag && (
-            <button onClick={() => { setTag(''); apply({ tag: '' }) }} className="text-xs text-teal-600 hover:underline mt-1">
+          {tags.length > 0 && (
+            <button onClick={() => { setTags([]); apply({ tag: '' }) }} className="text-xs text-teal-600 hover:underline mt-1">
               Clear
             </button>
           )}

@@ -68,7 +68,12 @@ async function getJobs(params: SearchParams) {
     where.officeDaysPerWeek = { lte: max }
   }
   if (params.tag) {
-    where.tags = { some: { tag: params.tag } }
+    const selectedTags = params.tag.split(',').filter(Boolean)
+    if (selectedTags.length === 1) {
+      where.tags = { some: { tag: selectedTags[0] } }
+    } else if (selectedTags.length > 1) {
+      where.tags = { some: { tag: { in: selectedTags } } }
+    }
   }
 
   const [jobs, total] = await Promise.all([
@@ -88,7 +93,7 @@ async function getJobs(params: SearchParams) {
 export default async function JobsPage({ searchParams }: { searchParams: SearchParams }) {
   const { jobs, total, page, pages } = await getJobs(searchParams)
 
-  const activeTag = searchParams.tag ?? ''
+  const activeTags = searchParams.tag ? searchParams.tag.split(',').filter(Boolean) : []
   const tagLabels: Record<string, string> = {
     FOUR_DAY_WEEK: '4-Day Week', SCHOOL_HOURS: 'School Hours', TERM_TIME: 'Term Time',
     JOB_SHARE: 'Job Share', ASYNC: 'Async', COMPRESSED_HOURS: 'Compressed Hours',
@@ -101,8 +106,10 @@ export default async function JobsPage({ searchParams }: { searchParams: SearchP
         <h1 className="text-2xl font-bold text-gray-900">
           {searchParams.q
             ? `Jobs matching "${searchParams.q}"`
-            : activeTag
-            ? `${tagLabels[activeTag] ?? activeTag} Jobs`
+            : activeTags.length === 1
+            ? `${tagLabels[activeTags[0]] ?? activeTags[0]} Jobs`
+            : activeTags.length > 1
+            ? `${activeTags.map(t => tagLabels[t] ?? t).join(', ')} Jobs`
             : 'Flexible Jobs for Parents'}
         </h1>
         <p className="text-gray-500 mt-1">{total.toLocaleString()} {total === 1 ? 'job' : 'jobs'} found</p>
