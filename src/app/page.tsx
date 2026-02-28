@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma'
 import JobCard from '@/components/JobCard'
 import NewsletterSignup from '@/components/NewsletterSignup'
 
-export const revalidate = 300 // ISR: re-generate every 5 min
+export const revalidate = 60 // ISR: re-generate every 60 seconds
 
 async function getFeaturedJobs() {
   return prisma.job.findMany({
