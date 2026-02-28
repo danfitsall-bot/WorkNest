@@ -7,10 +7,5 @@ export default function SignUpPage({
 }: {
   searchParams: { role?: string }
 }) {
-  return (
-    <SignUpForm
-      role={searchParams.role ?? 'SEEKER'}
-      googleConfigured={!!process.env.GOOGLE_CLIENT_ID}
-    />
-  )
+  return <SignUpForm role={searchParams.role ?? 'SEEKER'} />
 }

@@ -7,10 +7,5 @@ export default function SignInPage({
 }: {
   searchParams: { callbackUrl?: string }
 }) {
-  return (
-    <SignInForm
-      callbackUrl={searchParams.callbackUrl ?? '/'}
-      googleConfigured={!!process.env.GOOGLE_CLIENT_ID}
-    />
-  )
+  return <SignInForm callbackUrl={searchParams.callbackUrl ?? '/'} />
 }
