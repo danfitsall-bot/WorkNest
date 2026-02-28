@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -11,7 +11,8 @@ datasource db {
 // Plan values: FREE | STARTER | GROWTH | ENTERPRISE
 // Role values: SEEKER | EMPLOYER | ADMIN
 // JobStatus values: DRAFT | ACTIVE | EXPIRED | PAUSED
-// FlexTag values: SCHOOL_HOURS | TERM_TIME | FOUR_DAY_WEEK | JOB_SHARE | ASYNC | COMPRESSED_HOURS
+// FlexTag values: SCHOOL_HOURS | TERM_TIME | FOUR_DAY_WEEK | JOB_SHARE | ASYNC | COMPRESSED_HOURS | FLEXIBLE_START_FINISH
+// ContractType values: PERMANENT | FTC | CONTRACT
 // AppStatus values: PENDING | REVIEWED | SHORTLISTED | REJECTED
 
 model Account {
@@ -106,9 +107,12 @@ model Job {
   featuredUntil   DateTime?
   status          String    @default("DRAFT") // DRAFT | ACTIVE | EXPIRED | PAUSED
   closingDate     DateTime?
-  sector          String?
-  applyUrl        String?
-  stripePaymentId String?
+  sector            String?
+  applyUrl          String?
+  returnerFriendly  Boolean   @default(false)
+  contractType      String?   // PERMANENT | FTC | CONTRACT
+  officeDaysPerWeek Int?      // 0-5; 0 = fully remote, null = not specified
+  stripePaymentId   String?
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 

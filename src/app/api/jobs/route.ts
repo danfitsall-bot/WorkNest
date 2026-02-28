@@ -22,6 +22,7 @@ export async function POST(req: NextRequest) {
   const {
     companyId, title, description, requirements, location, remote, partTime,
     salaryMin, salaryMax, sector, applyUrl, tags, featured, closingDate,
+    returnerFriendly, contractType, officeDaysPerWeek,
   } = body
 
   if (!title || !description) {
@@ -45,6 +46,9 @@ export async function POST(req: NextRequest) {
       featured: featured ?? false,
       status: 'ACTIVE',
       closingDate: closingDate ? new Date(closingDate) : null,
+      returnerFriendly: returnerFriendly ?? false,
+      contractType: contractType || null,
+      officeDaysPerWeek: officeDaysPerWeek != null && officeDaysPerWeek !== '' ? parseInt(officeDaysPerWeek) : null,
       tags: {
         create: (tags ?? []).map((tag: string) => ({ tag })),
       },

@@ -21,6 +21,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   const {
     title, description, requirements, location, remote, partTime,
     salaryMin, salaryMax, sector, applyUrl, tags, featured, closingDate, status,
+    returnerFriendly, contractType, officeDaysPerWeek,
   } = await req.json()
 
   const updated = await prisma.job.update({
@@ -39,6 +40,9 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       featured: featured ?? false,
       status: status ?? job.status,
       closingDate: closingDate ? new Date(closingDate) : null,
+      returnerFriendly: returnerFriendly ?? false,
+      contractType: contractType || null,
+      officeDaysPerWeek: officeDaysPerWeek != null && officeDaysPerWeek !== '' ? parseInt(officeDaysPerWeek) : null,
       tags: {
         deleteMany: {},
         create: (tags ?? []).map((tag: string) => ({ tag })),

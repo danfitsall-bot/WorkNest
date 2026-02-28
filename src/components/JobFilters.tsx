@@ -10,7 +10,10 @@ interface Filters {
   tag?: string
   hours?: string
   sector?: string
-  salaryMax?: string
+  salaryMin?: string
+  returnerFriendly?: string
+  contractType?: string
+  officeDaysMax?: string
 }
 
 const FLEX_TAGS = [
@@ -20,11 +23,18 @@ const FLEX_TAGS = [
   { value: 'JOB_SHARE', label: 'Job Share', icon: '🤝' },
   { value: 'ASYNC', label: 'Async', icon: '💬' },
   { value: 'COMPRESSED_HOURS', label: 'Compressed', icon: '⏰' },
+  { value: 'FLEXIBLE_START_FINISH', label: 'Flex Start/Finish', icon: '🕐' },
 ]
 
 const SECTORS = [
   'Technology', 'Marketing', 'Finance', 'Healthcare', 'Education',
   'Design', 'Operations', 'HR', 'Legal', 'Retail',
+]
+
+const CONTRACT_TYPES = [
+  { value: 'PERMANENT', label: 'Permanent' },
+  { value: 'FTC', label: 'Fixed-term' },
+  { value: 'CONTRACT', label: 'Contract' },
 ]
 
 export default function JobFilters({ current }: { current: Filters }) {
@@ -37,21 +47,32 @@ export default function JobFilters({ current }: { current: Filters }) {
   const [tag, setTag] = useState(current.tag ?? '')
   const [hours, setHours] = useState(current.hours ?? '')
   const [sector, setSector] = useState(current.sector ?? '')
-  const [salaryMax, setSalaryMax] = useState(current.salaryMax ?? '')
+  const [salaryMin, setSalaryMin] = useState(current.salaryMin ?? '')
+  const [returnerFriendly, setReturnerFriendly] = useState(current.returnerFriendly === 'true')
+  const [contractType, setContractType] = useState(current.contractType ?? '')
+  const [officeDaysMax, setOfficeDaysMax] = useState(current.officeDaysMax ?? '')
 
   const apply = useCallback((overrides: Partial<Filters> = {}) => {
     const params: Record<string, string> = {}
-    const merged = { q, location, remote: remote ? 'true' : '', tag, hours, sector, salaryMax, ...overrides }
+    const merged = {
+      q, location,
+      remote: remote ? 'true' : '',
+      tag, hours, sector, salaryMin,
+      returnerFriendly: returnerFriendly ? 'true' : '',
+      contractType, officeDaysMax,
+      ...overrides,
+    }
     Object.entries(merged).forEach(([k, v]) => { if (v) params[k] = v })
     router.push(`${pathname}?${new URLSearchParams(params)}`)
-  }, [q, location, remote, tag, hours, sector, salaryMax, router, pathname])
+  }, [q, location, remote, tag, hours, sector, salaryMin, returnerFriendly, contractType, officeDaysMax, router, pathname])
 
   function clearAll() {
-    setQ(''); setLocation(''); setRemote(false); setTag(''); setHours(''); setSector(''); setSalaryMax('')
+    setQ(''); setLocation(''); setRemote(false); setTag(''); setHours('')
+    setSector(''); setSalaryMin(''); setReturnerFriendly(false); setContractType(''); setOfficeDaysMax('')
     router.push(pathname)
   }
 
-  const hasFilters = q || location || remote || tag || hours || sector || salaryMax
+  const hasFilters = q || location || remote || tag || hours || sector || salaryMin || returnerFriendly || contractType || officeDaysMax
 
   return (
     <div className="bg-white rounded-2xl border border-gray-100 p-5 space-y-6">
@@ -62,7 +83,7 @@ export default function JobFilters({ current }: { current: Filters }) {
         )}
       </div>
 
-      {/* Search */}
+      {/* Keyword */}
       <div>
         <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Keyword</label>
         <input
@@ -97,6 +118,17 @@ export default function JobFilters({ current }: { current: Filters }) {
           className="w-4 h-4 text-teal-600 rounded"
         />
         <span className="text-sm font-medium text-gray-700">Remote only</span>
+      </label>
+
+      {/* Career break */}
+      <label className="flex items-center gap-2 cursor-pointer">
+        <input
+          type="checkbox"
+          checked={returnerFriendly}
+          onChange={e => { setReturnerFriendly(e.target.checked); apply({ returnerFriendly: e.target.checked ? 'true' : '' }) }}
+          className="w-4 h-4 text-teal-600 rounded"
+        />
+        <span className="text-sm font-medium text-gray-700">Career break welcome</span>
       </label>
 
       {/* Flexibility */}
@@ -138,6 +170,19 @@ export default function JobFilters({ current }: { current: Filters }) {
         </select>
       </div>
 
+      {/* Contract type */}
+      <div>
+        <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Contract type</label>
+        <select
+          value={contractType}
+          onChange={e => { setContractType(e.target.value); apply({ contractType: e.target.value }) }}
+          className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+        >
+          <option value="">Any</option>
+          {CONTRACT_TYPES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
+        </select>
+      </div>
+
       {/* Sector */}
       <div>
         <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Sector</label>
@@ -151,25 +196,47 @@ export default function JobFilters({ current }: { current: Filters }) {
         </select>
       </div>
 
-      {/* Salary */}
+      {/* Office days */}
       <div>
         <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
-          Max salary: {salaryMax ? `£${parseInt(salaryMax).toLocaleString()}` : 'Any'}
+          Max office days: {officeDaysMax !== '' ? `${officeDaysMax} day${officeDaysMax === '1' ? '' : 's'}/wk` : 'Any'}
         </label>
         <input
           type="range"
-          min={20000}
-          max={200000}
-          step={5000}
-          value={salaryMax || 200000}
-          onChange={e => setSalaryMax(e.target.value === '200000' ? '' : e.target.value)}
+          min={0}
+          max={5}
+          step={1}
+          value={officeDaysMax !== '' ? officeDaysMax : 5}
+          onChange={e => setOfficeDaysMax(e.target.value === '5' ? '' : e.target.value)}
           onMouseUp={() => apply()}
           onTouchEnd={() => apply()}
           className="w-full accent-teal-600"
         />
         <div className="flex justify-between text-xs text-gray-400 mt-1">
-          <span>£20k</span>
-          <span>£200k+</span>
+          <span>Remote</span>
+          <span>On-site</span>
+        </div>
+      </div>
+
+      {/* Min salary */}
+      <div>
+        <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+          Min salary: {salaryMin ? `£${parseInt(salaryMin).toLocaleString()}+` : 'Any'}
+        </label>
+        <input
+          type="range"
+          min={0}
+          max={150000}
+          step={5000}
+          value={salaryMin || 0}
+          onChange={e => setSalaryMin(e.target.value === '0' ? '' : e.target.value)}
+          onMouseUp={() => apply()}
+          onTouchEnd={() => apply()}
+          className="w-full accent-teal-600"
+        />
+        <div className="flex justify-between text-xs text-gray-400 mt-1">
+          <span>Any</span>
+          <span>£150k+</span>
         </div>
       </div>
 

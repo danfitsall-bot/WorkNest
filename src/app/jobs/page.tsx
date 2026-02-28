@@ -15,7 +15,10 @@ interface SearchParams {
   tag?: string
   hours?: string
   sector?: string
-  salaryMax?: string
+  salaryMin?: string
+  returnerFriendly?: string
+  contractType?: string
+  officeDaysMax?: string
   page?: string
 }
 
@@ -43,16 +46,27 @@ async function getJobs(params: SearchParams) {
   if (params.hours === 'part') {
     where.partTime = true
   }
+  if (params.hours === 'full') {
+    where.partTime = false
+  }
   if (params.sector) {
     where.sector = params.sector
   }
-  if (params.salaryMax) {
-    where.salaryMin = { lte: parseInt(params.salaryMax, 10) }
+  if (params.salaryMin) {
+    where.salaryMin = { gte: parseInt(params.salaryMin, 10) }
   }
-
-  const tagFilter = params.tag
-  if (tagFilter) {
-    where.tags = { some: { tag: tagFilter } }
+  if (params.returnerFriendly === 'true') {
+    where.returnerFriendly = true
+  }
+  if (params.contractType) {
+    where.contractType = params.contractType
+  }
+  if (params.officeDaysMax !== undefined && params.officeDaysMax !== '') {
+    const max = parseInt(params.officeDaysMax, 10)
+    where.officeDaysPerWeek = { lte: max }
+  }
+  if (params.tag) {
+    where.tags = { some: { tag: params.tag } }
   }
 
   const [jobs, total] = await Promise.all([
@@ -76,6 +90,7 @@ export default async function JobsPage({ searchParams }: { searchParams: SearchP
   const tagLabels: Record<string, string> = {
     FOUR_DAY_WEEK: '4-Day Week', SCHOOL_HOURS: 'School Hours', TERM_TIME: 'Term Time',
     JOB_SHARE: 'Job Share', ASYNC: 'Async', COMPRESSED_HOURS: 'Compressed Hours',
+    FLEXIBLE_START_FINISH: 'Flexible Start/Finish',
   }
 
   return (

@@ -39,6 +39,9 @@ export default async function EditJobPage({ params }: { params: { id: string } }
     featured: job.featured,
     closingDate: job.closingDate ? job.closingDate.toISOString().split('T')[0] : '',
     status: job.status,
+    returnerFriendly: (job as any).returnerFriendly ?? false,
+    contractType: (job as any).contractType ?? '',
+    officeDaysPerWeek: (job as any).officeDaysPerWeek ?? null,
   }
 
   return (

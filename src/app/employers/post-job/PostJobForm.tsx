@@ -10,11 +10,18 @@ const FLEX_TAGS = [
   { value: 'JOB_SHARE', label: 'Job Share' },
   { value: 'ASYNC', label: 'Async' },
   { value: 'COMPRESSED_HOURS', label: 'Compressed Hours' },
+  { value: 'FLEXIBLE_START_FINISH', label: 'Flexible Start/Finish' },
 ]
 
 const SECTORS = [
   'Technology', 'Marketing', 'Finance', 'Healthcare', 'Education',
   'Design', 'Operations', 'HR', 'Legal', 'Retail', 'Other',
+]
+
+const CONTRACT_TYPES = [
+  { value: 'PERMANENT', label: 'Permanent' },
+  { value: 'FTC', label: 'Fixed-term contract' },
+  { value: 'CONTRACT', label: 'Contract / freelance' },
 ]
 
 interface Props {
@@ -40,6 +47,9 @@ export default function PostJobForm({ companyId, canFeature }: Props) {
   const [tags, setTags] = useState<string[]>([])
   const [featured, setFeatured] = useState(false)
   const [closingDate, setClosingDate] = useState('')
+  const [returnerFriendly, setReturnerFriendly] = useState(false)
+  const [contractType, setContractType] = useState('')
+  const [officeDaysPerWeek, setOfficeDaysPerWeek] = useState('')
 
   function toggleTag(tag: string) {
     setTags(prev => prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag])
@@ -58,6 +68,9 @@ export default function PostJobForm({ companyId, canFeature }: Props) {
         salaryMax: salaryMax ? parseInt(salaryMax) : null,
         sector, applyUrl, tags, featured,
         closingDate: closingDate || null,
+        returnerFriendly,
+        contractType: contractType || null,
+        officeDaysPerWeek: officeDaysPerWeek !== '' ? parseInt(officeDaysPerWeek) : null,
       }),
     })
     const data = await res.json()
@@ -102,6 +115,30 @@ export default function PostJobForm({ companyId, canFeature }: Props) {
 
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Contract type</label>
+            <select value={contractType} onChange={e => setContractType(e.target.value)}
+              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500">
+              <option value="">Not specified</option>
+              {CONTRACT_TYPES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Office days per week</label>
+            <select value={officeDaysPerWeek} onChange={e => setOfficeDaysPerWeek(e.target.value)}
+              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500">
+              <option value="">Not specified</option>
+              <option value="0">0 — Fully remote</option>
+              <option value="1">1 day / week</option>
+              <option value="2">2 days / week</option>
+              <option value="3">3 days / week</option>
+              <option value="4">4 days / week</option>
+              <option value="5">5 days — Fully on-site</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="grid sm:grid-cols-2 gap-4">
+          <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Min salary (£)</label>
             <input type="number" value={salaryMin} onChange={e => setSalaryMin(e.target.value)} step={1000} min={0}
               className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
@@ -136,6 +173,10 @@ export default function PostJobForm({ companyId, canFeature }: Props) {
           <label className="flex items-center gap-2 cursor-pointer">
             <input type="checkbox" checked={partTime} onChange={e => setPartTime(e.target.checked)} className="w-4 h-4 text-teal-600 rounded" />
             <span className="text-sm text-gray-700">Part-time</span>
+          </label>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" checked={returnerFriendly} onChange={e => setReturnerFriendly(e.target.checked)} className="w-4 h-4 text-teal-600 rounded" />
+            <span className="text-sm text-gray-700">Career break welcome</span>
           </label>
         </div>
       </div>
