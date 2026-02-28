@@ -25,16 +25,18 @@ interface SearchParams {
 const PAGE_SIZE = 20
 
 async function getJobs(params: SearchParams) {
-  const page = parseInt(params.page ?? '1', 10)
+  const rawPage = parseInt(params.page ?? '1', 10)
+  const page = isNaN(rawPage) || rawPage < 1 ? 1 : Math.min(rawPage, 1000)
   const skip = (page - 1) * PAGE_SIZE
 
   const where: any = { status: 'ACTIVE' }
 
   if (params.q) {
+    const q = params.q.slice(0, 200)
     where.OR = [
-      { title: { contains: params.q, mode: 'insensitive' } },
-      { company: { name: { contains: params.q, mode: 'insensitive' } } },
-      { description: { contains: params.q, mode: 'insensitive' } },
+      { title: { contains: q, mode: 'insensitive' } },
+      { company: { name: { contains: q, mode: 'insensitive' } } },
+      { description: { contains: q, mode: 'insensitive' } },
     ]
   }
   if (params.location) {

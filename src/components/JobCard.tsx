@@ -7,6 +7,7 @@ const TAG_STYLES: Record<string, string> = {
   JOB_SHARE: 'bg-rose-100 text-rose-700',
   ASYNC: 'bg-blue-100 text-blue-700',
   COMPRESSED_HOURS: 'bg-indigo-100 text-indigo-700',
+  FLEXIBLE_START_FINISH: 'bg-cyan-100 text-cyan-700',
 }
 
 const TAG_LABELS: Record<string, string> = {
@@ -16,6 +17,13 @@ const TAG_LABELS: Record<string, string> = {
   JOB_SHARE: 'Job Share',
   ASYNC: 'Async',
   COMPRESSED_HOURS: 'Compressed Hours',
+  FLEXIBLE_START_FINISH: 'Flex Start/Finish',
+}
+
+const CONTRACT_LABELS: Record<string, string> = {
+  PERMANENT: 'Permanent',
+  FTC: 'Fixed-term',
+  CONTRACT: 'Contract',
 }
 
 interface JobCardProps {
@@ -30,6 +38,9 @@ interface JobCardProps {
   tags: { tag: string }[]
   featured: boolean
   createdAt: Date
+  returnerFriendly?: boolean
+  contractType?: string | null
+  officeDaysPerWeek?: number | null
 }
 
 function formatSalary(min: number | null, max: number | null): string {
@@ -49,7 +60,16 @@ function timeAgo(date: Date): string {
   return `${Math.floor(days / 30)}mo ago`
 }
 
-export default function JobCard({ slug, title, company, location, remote, salaryMin, salaryMax, tags, featured, createdAt }: JobCardProps) {
+function officeDaysLabel(days: number): string {
+  if (days === 0) return 'Fully remote'
+  if (days === 5) return 'On-site'
+  return `${days}d in office`
+}
+
+export default function JobCard({
+  slug, title, company, location, remote, salaryMin, salaryMax, tags, featured, createdAt,
+  returnerFriendly, contractType, officeDaysPerWeek,
+}: JobCardProps) {
   const salary = formatSalary(salaryMin, salaryMax)
 
   return (
@@ -76,11 +96,16 @@ export default function JobCard({ slug, title, company, location, remote, salary
             {company.parentFriendlyBadge && (
               <span className="text-xs bg-teal-50 text-teal-700 px-1.5 py-0.5 rounded-full font-medium">✓ Parent Friendly</span>
             )}
+            {returnerFriendly && (
+              <span className="text-xs bg-emerald-50 text-emerald-700 px-1.5 py-0.5 rounded-full font-medium">Career break welcome</span>
+            )}
           </div>
           <h3 className="font-semibold text-gray-900 mt-0.5 truncate">{title}</h3>
           <div className="flex items-center gap-3 mt-1 text-sm text-gray-400 flex-wrap">
             {location && <span>{location}</span>}
             {remote && <span className="text-blue-600 font-medium">Remote</span>}
+            {officeDaysPerWeek != null && <span>{officeDaysLabel(officeDaysPerWeek)}</span>}
+            {contractType && <span>{CONTRACT_LABELS[contractType] ?? contractType}</span>}
             {salary && <span className="font-medium text-gray-600">{salary}</span>}
             <span>{timeAgo(createdAt)}</span>
           </div>

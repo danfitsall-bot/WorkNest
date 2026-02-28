@@ -119,6 +119,16 @@ model Job {
   tags         JobTag[]
   applications Application[]
   savedBy      SavedJob[]
+
+  @@index([status, featured, createdAt])
+  @@index([companyId])
+  @@index([sector])
+  @@index([salaryMin])
+  @@index([remote])
+  @@index([partTime])
+  @@index([returnerFriendly])
+  @@index([contractType])
+  @@index([officeDaysPerWeek])
 }
 
 model JobTag {
@@ -126,6 +136,9 @@ model JobTag {
   jobId String
   job   Job    @relation(fields: [jobId], references: [id], onDelete: Cascade)
   tag   String // SCHOOL_HOURS | TERM_TIME | FOUR_DAY_WEEK | JOB_SHARE | ASYNC | COMPRESSED_HOURS
+
+  @@index([jobId])
+  @@index([tag])
 }
 
 model Application {

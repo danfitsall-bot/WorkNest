@@ -16,11 +16,19 @@ const TAG_STYLES: Record<string, string> = {
   JOB_SHARE: 'bg-rose-100 text-rose-700',
   ASYNC: 'bg-blue-100 text-blue-700',
   COMPRESSED_HOURS: 'bg-indigo-100 text-indigo-700',
+  FLEXIBLE_START_FINISH: 'bg-cyan-100 text-cyan-700',
 }
 
 const TAG_LABELS: Record<string, string> = {
   FOUR_DAY_WEEK: '4-Day Week', SCHOOL_HOURS: 'School Hours', TERM_TIME: 'Term Time',
   JOB_SHARE: 'Job Share', ASYNC: 'Async', COMPRESSED_HOURS: 'Compressed Hours',
+  FLEXIBLE_START_FINISH: 'Flex Start/Finish',
+}
+
+const CONTRACT_LABELS: Record<string, string> = {
+  PERMANENT: 'Permanent',
+  FTC: 'Fixed-term contract',
+  CONTRACT: 'Contract / freelance',
 }
 
 async function getJob(slug: string) {
@@ -39,6 +47,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
+function officeDaysLabel(days: number): string {
+  if (days === 0) return 'Fully remote'
+  if (days === 5) return '5 days on-site'
+  return `${days} day${days === 1 ? '' : 's'} in office`
+}
+
 export default async function JobDetailPage({ params }: Props) {
   const job = await getJob(params.slug)
   if (!job || job.status !== 'ACTIVE') notFound()
@@ -47,6 +61,8 @@ export default async function JobDetailPage({ params }: Props) {
     ? `£${job.salaryMin.toLocaleString()} – £${job.salaryMax.toLocaleString()}`
     : job.salaryMax
     ? `Up to £${job.salaryMax.toLocaleString()}`
+    : job.salaryMin
+    ? `From £${job.salaryMin.toLocaleString()}`
     : null
 
   // JSON-LD for Google Jobs
@@ -104,17 +120,26 @@ export default async function JobDetailPage({ params }: Props) {
                   )}
                 </div>
                 <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
+                  <div className="flex items-center gap-2 mb-1 flex-wrap">
                     <span className="font-medium text-gray-600">{job.company.name}</span>
                     {job.company.parentFriendlyBadge && (
                       <span className="text-xs bg-teal-50 text-teal-700 px-2 py-0.5 rounded-full font-medium">✓ Parent Friendly</span>
+                    )}
+                    {(job as any).returnerFriendly && (
+                      <span className="text-xs bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full font-medium">Career break welcome</span>
                     )}
                   </div>
                   <h1 className="text-2xl font-bold text-gray-900 mb-3">{job.title}</h1>
                   <div className="flex flex-wrap gap-4 text-sm text-gray-500">
                     {job.location && <span>📍 {job.location}</span>}
                     {job.remote && <span className="text-blue-600 font-medium">🏠 Remote</span>}
+                    {(job as any).officeDaysPerWeek != null && (
+                      <span>🏢 {officeDaysLabel((job as any).officeDaysPerWeek)}</span>
+                    )}
                     {job.partTime && <span>⏰ Part-time</span>}
+                    {(job as any).contractType && (
+                      <span>📋 {CONTRACT_LABELS[(job as any).contractType] ?? (job as any).contractType}</span>
+                    )}
                     {salary && <span className="text-gray-700 font-semibold">💷 {salary}</span>}
                     {job.sector && <span>🏢 {job.sector}</span>}
                     {job.closingDate && <span>📅 Closes {new Date(job.closingDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</span>}
