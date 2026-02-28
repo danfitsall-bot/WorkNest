@@ -1,8 +1,8 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import { prisma } from '@/lib/prisma'
 import JobCard from '@/components/JobCard'
 import NewsletterSignup from '@/components/NewsletterSignup'
+import EmployerLogoCard from '@/components/EmployerLogoCard'
 
 export const revalidate = 60 // ISR: re-generate every 60 seconds
 
@@ -171,19 +171,7 @@ export default async function HomePage() {
         <p className="text-center text-sm font-medium text-gray-400 uppercase tracking-wider mb-8">Trusted by great employers</p>
         <div className="flex flex-wrap justify-center items-center gap-4">
           {EMPLOYERS.map(e => (
-            <div key={e.name} className="flex flex-col items-center gap-2 bg-white rounded-2xl border border-gray-100 shadow-sm px-6 py-4 min-w-[96px]">
-              <Image
-                src={`https://logo.clearbit.com/${e.domain}`}
-                alt={`${e.name} logo`}
-                width={48}
-                height={48}
-                className="rounded-xl object-contain"
-              />
-              <span className="text-xs font-semibold text-gray-600 text-center leading-tight">{e.name}</span>
-              {e.badge && (
-                <span className="text-xs bg-teal-50 text-teal-700 px-1.5 py-0.5 rounded-full font-medium">✓ Certified</span>
-              )}
-            </div>
+            <EmployerLogoCard key={e.name} name={e.name} domain={e.domain} badge={e.badge} />
           ))}
         </div>
       </section>

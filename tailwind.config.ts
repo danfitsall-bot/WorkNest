@@ -35,9 +35,9 @@ const config: Config = {
           900: '#7c2d12',
         },
         warm: {
-          50: '#fce5cd',
-          100: '#f8d4b0',
-          200: '#f0bc90',
+          50: '#f5ebe1',
+          100: '#ecddd0',
+          200: '#dfc8b8',
         },
       },
       fontFamily: {
