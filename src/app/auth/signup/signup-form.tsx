@@ -9,6 +9,7 @@ export default function SignUpForm({ role: initialRole }: { role: string }) {
   const router = useRouter()
   const [role, setRole] = useState(initialRole)
   const [name, setName] = useState('')
+  const [companyName, setCompanyName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -21,7 +22,7 @@ export default function SignUpForm({ role: initialRole }: { role: string }) {
     const res = await fetch('/api/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, password, role }),
+      body: JSON.stringify({ name, email, password, role, companyName }),
     })
     const data = await res.json()
     if (!res.ok) {
@@ -97,6 +98,14 @@ export default function SignUpForm({ role: initialRole }: { role: string }) {
                 className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
                 placeholder="Sarah Johnson" />
             </div>
+            {role === 'EMPLOYER' && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Company name</label>
+                <input type="text" value={companyName} onChange={e => setCompanyName(e.target.value)} required
+                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  placeholder="Acme Ltd" />
+              </div>
+            )}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
               <input type="email" value={email} onChange={e => setEmail(e.target.value)} required
