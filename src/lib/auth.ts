@@ -5,9 +5,23 @@ import { PrismaAdapter } from '@auth/prisma-adapter'
 import bcrypt from 'bcryptjs'
 import { prisma } from './prisma'
 
+const useSecureCookies = process.env.NODE_ENV === 'production'
+
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma) as any,
+  secret: process.env.NEXTAUTH_SECRET,
   session: { strategy: 'jwt' },
+  cookies: {
+    sessionToken: {
+      name: useSecureCookies ? '__Secure-next-auth.session-token' : 'next-auth.session-token',
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: useSecureCookies,
+      },
+    },
+  },
   pages: {
     signIn: '/auth/signin',
     error: '/auth/error',
