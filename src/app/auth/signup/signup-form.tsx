@@ -5,8 +5,9 @@ import { useState, FormEvent } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
-export default function SignUpForm({ role }: { role: string }) {
+export default function SignUpForm({ role: initialRole }: { role: string }) {
   const router = useRouter()
+  const [role, setRole] = useState(initialRole)
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -47,12 +48,23 @@ export default function SignUpForm({ role }: { role: string }) {
             </div>
             <span className="text-2xl font-bold text-gray-900">Work<span className="text-teal-600">Nest</span></span>
           </Link>
-          <h1 className="text-2xl font-bold text-gray-900">
-            {role === 'EMPLOYER' ? 'Create employer account' : 'Join WorkNest free'}
-          </h1>
-          <p className="text-gray-500 mt-1">
-            {role === 'EMPLOYER' ? 'Start hiring flexible talent' : 'Find jobs that work for your family'}
-          </p>
+          <h1 className="text-2xl font-bold text-gray-900">Create your account</h1>
+          <p className="text-gray-500 mt-1">Join WorkNest today</p>
+        </div>
+
+        <div className="flex rounded-xl border border-gray-200 overflow-hidden mb-6">
+          <button
+            onClick={() => setRole('SEEKER')}
+            className={`flex-1 py-2.5 text-sm font-medium transition-colors ${role === 'SEEKER' ? 'bg-teal-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
+          >
+            I&apos;m a candidate
+          </button>
+          <button
+            onClick={() => setRole('EMPLOYER')}
+            className={`flex-1 py-2.5 text-sm font-medium transition-colors ${role === 'EMPLOYER' ? 'bg-teal-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
+          >
+            I&apos;m an employer
+          </button>
         </div>
 
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
