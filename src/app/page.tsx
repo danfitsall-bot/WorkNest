@@ -42,12 +42,12 @@ const QUICK_FILTERS = [
 ]
 
 const EMPLOYERS = [
-  { name: 'Monzo', domain: 'monzo.com', badge: true },
-  { name: 'Octopus Energy', domain: 'octopusenergy.com', badge: true },
-  { name: 'Deliveroo', domain: 'deliveroo.co.uk', badge: false },
-  { name: 'Bumble', domain: 'bumble.com', badge: true },
-  { name: 'ASOS', domain: 'asos.com', badge: false },
-  { name: 'Spotify', domain: 'spotify.com', badge: true },
+  'Monzo',
+  'Octopus Energy',
+  'Deliveroo',
+  'Bumble',
+  'ASOS',
+  'Spotify',
 ]
 
 export default async function HomePage() {
@@ -169,9 +169,9 @@ export default async function HomePage() {
       {/* Trusted employers */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <p className="text-center text-sm font-medium text-gray-400 uppercase tracking-wider mb-8">Trusted by great employers</p>
-        <div className="flex flex-wrap justify-center items-center gap-4">
-          {EMPLOYERS.map(e => (
-            <EmployerLogoCard key={e.name} name={e.name} domain={e.domain} badge={e.badge} />
+        <div className="flex flex-wrap justify-center items-center gap-10">
+          {EMPLOYERS.map(name => (
+            <EmployerLogoCard key={name} name={name} />
           ))}
         </div>
       </section>
