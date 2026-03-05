@@ -24,6 +24,7 @@ export default async function DashboardPage() {
     where: { userId },
     include: {
       jobs: {
+        where: { status: { not: 'DELETED' } },
         include: { tags: true, _count: { select: { applications: true } } },
         orderBy: { createdAt: 'desc' },
       },

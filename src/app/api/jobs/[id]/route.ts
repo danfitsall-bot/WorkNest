@@ -97,10 +97,11 @@ export async function DELETE(_req: NextRequest, { params }: { params: { id: stri
     const job = await getOwnedJob((session.user as any).id, params.id)
     if (!job) return NextResponse.json({ error: 'Job not found' }, { status: 404 })
 
+    // Soft-delete: preserve applications/resumes for the employer's records.
+    // Only remove SavedJob bookmarks (jobseeker bookmarks, safe to drop).
     await prisma.$transaction([
-      prisma.application.deleteMany({ where: { jobId: params.id } }),
       prisma.savedJob.deleteMany({ where: { jobId: params.id } }),
-      prisma.job.delete({ where: { id: params.id } }),
+      prisma.job.update({ where: { id: params.id }, data: { status: 'DELETED' } }),
     ])
     return NextResponse.json({ success: true })
   } catch (error) {
