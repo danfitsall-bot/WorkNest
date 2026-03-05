@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { canFeature } from '@/lib/plans'
+import type { Plan } from '@/lib/plans'
 
 function slugify(str: string) {
   return str
@@ -83,6 +85,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'You can only post jobs for your own company' }, { status: 403 })
     }
 
+    // Only plans that include featured listings may set featured: true
+    const allowFeatured = canFeature(company.plan as Plan) && (featured ?? false)
+
     const job = await prisma.job.create({
       data: {
         companyId,
@@ -97,7 +102,7 @@ export async function POST(req: NextRequest) {
         salaryMax: salaryMax ?? null,
         sector: sector || null,
         applyUrl: applyUrl || null,
-        featured: featured ?? false,
+        featured: allowFeatured,
         status: 'ACTIVE',
         closingDate: closingDate ? new Date(closingDate) : null,
         returnerFriendly: returnerFriendly ?? false,

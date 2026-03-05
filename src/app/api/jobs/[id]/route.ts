@@ -97,7 +97,11 @@ export async function DELETE(_req: NextRequest, { params }: { params: { id: stri
     const job = await getOwnedJob((session.user as any).id, params.id)
     if (!job) return NextResponse.json({ error: 'Job not found' }, { status: 404 })
 
-    await prisma.job.delete({ where: { id: params.id } })
+    await prisma.$transaction([
+      prisma.application.deleteMany({ where: { jobId: params.id } }),
+      prisma.savedJob.deleteMany({ where: { jobId: params.id } }),
+      prisma.job.delete({ where: { id: params.id } }),
+    ])
     return NextResponse.json({ success: true })
   } catch (error) {
     console.error('DELETE /api/jobs/[id] error:', error)
