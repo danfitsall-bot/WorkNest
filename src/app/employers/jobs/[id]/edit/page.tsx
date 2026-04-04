@@ -10,7 +10,7 @@ export default async function EditJobPage({ params }: { params: { id: string } }
   const session = await getServerSession(authOptions)
   if (!session?.user) redirect('/auth/signin')
 
-  const userId = (session.user as any).id
+  const userId = session.user.id
   const company = await prisma.company.findUnique({ where: { userId } })
   if (!company) redirect('/employers/plans')
 
@@ -39,9 +39,9 @@ export default async function EditJobPage({ params }: { params: { id: string } }
     featured: job.featured,
     closingDate: job.closingDate ? job.closingDate.toISOString().split('T')[0] : '',
     status: job.status,
-    returnerFriendly: (job as any).returnerFriendly ?? false,
-    contractType: (job as any).contractType ?? '',
-    officeDaysPerWeek: (job as any).officeDaysPerWeek ?? null,
+    returnerFriendly: job.returnerFriendly ?? false,
+    contractType: job.contractType ?? '',
+    officeDaysPerWeek: job.officeDaysPerWeek ?? null,
   }
 
   return (

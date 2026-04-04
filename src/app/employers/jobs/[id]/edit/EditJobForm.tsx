@@ -2,27 +2,7 @@
 
 import { useState, FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
-
-const FLEX_TAGS = [
-  { value: 'FOUR_DAY_WEEK', label: '4-Day Week' },
-  { value: 'SCHOOL_HOURS', label: 'School Hours' },
-  { value: 'TERM_TIME', label: 'Term-Time' },
-  { value: 'JOB_SHARE', label: 'Job Share' },
-  { value: 'ASYNC', label: 'Async' },
-  { value: 'COMPRESSED_HOURS', label: 'Compressed Hours' },
-  { value: 'FLEXIBLE_START_FINISH', label: 'Flexible Start/Finish' },
-]
-
-const SECTORS = [
-  'Technology', 'Marketing', 'Finance', 'Healthcare', 'Education',
-  'Design', 'Operations', 'HR', 'Legal', 'Retail', 'Other',
-]
-
-const CONTRACT_TYPES = [
-  { value: 'PERMANENT', label: 'Permanent' },
-  { value: 'FTC', label: 'Fixed-term contract' },
-  { value: 'CONTRACT', label: 'Contract / freelance' },
-]
+import { FLEX_TAGS, SECTORS, CONTRACT_TYPES } from '@/lib/constants'
 
 interface Props {
   jobId: string

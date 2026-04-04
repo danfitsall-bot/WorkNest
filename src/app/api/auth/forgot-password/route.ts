@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { Resend } from 'resend'
+import { sendPasswordResetEmail } from '@/lib/email'
 import crypto from 'crypto'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-const FROM = process.env.RESEND_FROM_EMAIL ?? 'hello@worknest.co.uk'
+// TODO: Add rate limiting to prevent abuse of password reset endpoint
 
 export async function POST(req: NextRequest) {
   try {
@@ -20,28 +19,22 @@ export async function POST(req: NextRequest) {
 
     // Generate a reset token
     const token = crypto.randomBytes(32).toString('hex')
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex')
     const expires = new Date(Date.now() + 3600000) // 1 hour
 
-    // Store the token using the VerificationToken model
-    await prisma.verificationToken.upsert({
-      where: { identifier_token: { identifier: email, token: 'password-reset' } },
-      update: { token, expires },
-      create: { identifier: email, token, expires },
+    // Delete any existing reset tokens for this email, then create a new one.
+    // Using identifier as the unique lookup to avoid composite key collision
+    // with the @@unique([identifier, token]) constraint.
+    await prisma.verificationToken.deleteMany({
+      where: { identifier: email },
+    })
+    await prisma.verificationToken.create({
+      data: { identifier: email, token: hashedToken, expires },
     })
 
     const resetUrl = `${process.env.NEXT_PUBLIC_APP_URL}/auth/reset-password?token=${token}&email=${encodeURIComponent(email)}`
 
-    await resend.emails.send({
-      from: FROM,
-      to: email,
-      subject: 'Reset your WorkNest password',
-      html: `
-        <h1>Password reset</h1>
-        <p>Click the link below to reset your password. This link expires in 1 hour.</p>
-        <p><a href="${resetUrl}">Reset password →</a></p>
-        <p>If you didn't request this, you can safely ignore this email.</p>
-      `,
-    })
+    await sendPasswordResetEmail(email, resetUrl)
 
     return NextResponse.json({ ok: true })
   } catch (error) {

@@ -9,7 +9,7 @@ export default async function PostJobPage() {
   const session = await getServerSession(authOptions)
   if (!session?.user) redirect('/auth/signin')
 
-  const userId = (session.user as any).id
+  const userId = session.user.id
   const company = await prisma.company.findUnique({
     where: { userId },
     include: { _count: { select: { jobs: { where: { status: 'ACTIVE' } } } } },

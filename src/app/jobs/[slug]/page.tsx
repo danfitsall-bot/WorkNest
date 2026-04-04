@@ -60,12 +60,13 @@ export default async function JobDetailPage({ params }: Props) {
     getJob(params.slug),
     getServerSession(authOptions),
   ])
+  // Only show ACTIVE jobs to seekers. DRAFT, PAUSED, EXPIRED, and DELETED are all hidden.
   if (!job || job.status !== 'ACTIVE') notFound()
 
   // Check if current user has saved this job
   let initialSaved = false
   if (session?.user) {
-    const userId = (session.user as any).id
+    const userId = session.user.id
     const savedJob = await prisma.savedJob.findUnique({
       where: { userId_jobId: { userId, jobId: job.id } },
     })
@@ -140,7 +141,7 @@ export default async function JobDetailPage({ params }: Props) {
                     {job.company.parentFriendlyBadge && (
                       <span className="text-xs bg-teal-50 text-teal-700 px-2 py-0.5 rounded-full font-medium">✓ Parent Friendly</span>
                     )}
-                    {(job as any).returnerFriendly && (
+                    {job.returnerFriendly && (
                       <span className="text-xs bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full font-medium">Career break welcome</span>
                     )}
                   </div>
@@ -148,12 +149,12 @@ export default async function JobDetailPage({ params }: Props) {
                   <div className="flex flex-wrap gap-4 text-sm text-gray-500">
                     {job.location && <span>📍 {job.location}</span>}
                     {job.remote && <span className="text-blue-600 font-medium">🏠 Remote</span>}
-                    {(job as any).officeDaysPerWeek != null && (
-                      <span>🏢 {officeDaysLabel((job as any).officeDaysPerWeek)}</span>
+                    {job.officeDaysPerWeek != null && (
+                      <span>🏢 {officeDaysLabel(job.officeDaysPerWeek)}</span>
                     )}
                     {job.partTime && <span>⏰ Part-time</span>}
-                    {(job as any).contractType && (
-                      <span>📋 {CONTRACT_LABELS[(job as any).contractType] ?? (job as any).contractType}</span>
+                    {job.contractType && (
+                      <span>📋 {CONTRACT_LABELS[job.contractType] ?? job.contractType}</span>
                     )}
                     {salary && <span className="text-gray-700 font-semibold">💷 {salary}</span>}
                     {job.sector && <span>🏢 {job.sector}</span>}

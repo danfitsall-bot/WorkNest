@@ -11,8 +11,7 @@ async function getOwnedJob(userId: string, jobId: string) {
   return job
 }
 
-const VALID_CONTRACT_TYPES = ['PERMANENT', 'FTC', 'CONTRACT']
-const VALID_TAGS = ['SCHOOL_HOURS', 'TERM_TIME', 'FOUR_DAY_WEEK', 'JOB_SHARE', 'ASYNC', 'COMPRESSED_HOURS', 'FLEXIBLE_START_FINISH']
+import { VALID_CONTRACT_TYPES, VALID_TAGS } from '@/lib/constants'
 const VALID_STATUSES = ['ACTIVE', 'PAUSED', 'DRAFT']
 
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
@@ -20,7 +19,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     const session = await getServerSession(authOptions)
     if (!session?.user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-    const job = await getOwnedJob((session.user as any).id, params.id)
+    const job = await getOwnedJob(session.user.id, params.id)
     if (!job) return NextResponse.json({ error: 'Job not found' }, { status: 404 })
 
     const body = await req.json()
@@ -94,7 +93,7 @@ export async function DELETE(_req: NextRequest, { params }: { params: { id: stri
     const session = await getServerSession(authOptions)
     if (!session?.user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-    const job = await getOwnedJob((session.user as any).id, params.id)
+    const job = await getOwnedJob(session.user.id, params.id)
     if (!job) return NextResponse.json({ error: 'Job not found' }, { status: 404 })
 
     // Soft-delete: preserve applications/resumes for the employer's records.

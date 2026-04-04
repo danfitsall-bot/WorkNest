@@ -16,7 +16,7 @@ export default function Navbar() {
   const { data: session } = useSession()
   const [mobileOpen, setMobileOpen] = useState(false)
   const pathname = usePathname()
-  const user = session?.user as any
+  const user = session?.user
 
   return (
     <header className="bg-white border-b border-gray-100 sticky top-0 z-50">

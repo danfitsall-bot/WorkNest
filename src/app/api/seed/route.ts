@@ -5,6 +5,10 @@ import bcrypt from 'bcryptjs'
 // One-time seed endpoint. Protected by SEED_SECRET env var.
 // Call once after deployment: GET /api/seed?secret=YOUR_SEED_SECRET
 export async function GET(req: NextRequest) {
+  if (process.env.NODE_ENV === 'production') {
+    return NextResponse.json({ error: 'Disabled in production' }, { status: 403 })
+  }
+
   const secret = req.nextUrl.searchParams.get('secret')
   if (!secret || secret !== process.env.SEED_SECRET) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -82,7 +86,7 @@ export async function GET(req: NextRequest) {
     await prisma.job.upsert({
       where: { slug: job.slug },
       update: {},
-      create: { ...job, status: 'ACTIVE', flexible: true, closingDate: closing, tags: { create: tags.map(tag => ({ tag })) } },
+      create: { ...job, status: 'ACTIVE', closingDate: closing, tags: { create: tags.map(tag => ({ tag })) } },
     })
     seeded++
   }

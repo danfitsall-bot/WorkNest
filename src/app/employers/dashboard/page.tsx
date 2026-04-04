@@ -19,7 +19,7 @@ export default async function DashboardPage() {
   const session = await getServerSession(authOptions)
   if (!session?.user) redirect('/auth/signin')
 
-  const userId = (session.user as any).id
+  const userId = session.user.id
   let company = await prisma.company.findUnique({
     where: { userId },
     include: {

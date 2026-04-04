@@ -9,7 +9,7 @@ export async function POST() {
     const session = await getServerSession(authOptions)
     if (!session?.user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-    const userId = (session.user as any).id
+    const userId = session.user.id
     const company = await prisma.company.findUnique({ where: { userId } })
     if (!company?.stripeCustomerId) {
       return NextResponse.json({ error: 'No billing account found' }, { status: 404 })

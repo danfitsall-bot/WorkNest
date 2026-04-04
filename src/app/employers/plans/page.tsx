@@ -8,7 +8,7 @@ export default async function PlansPage() {
   const session = await getServerSession(authOptions)
   if (!session?.user) redirect('/auth/signin?callbackUrl=/employers/plans')
 
-  const userId = (session.user as any).id
+  const userId = session.user.id
   const company = await prisma.company.findUnique({ where: { userId } })
 
   return (

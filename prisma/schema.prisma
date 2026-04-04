@@ -10,7 +10,7 @@ datasource db {
 // SQLite dev: enums stored as String. PostgreSQL prod: migrate to native enums.
 // Plan values: FREE | STARTER | GROWTH | ENTERPRISE
 // Role values: SEEKER | EMPLOYER | ADMIN
-// JobStatus values: DRAFT | ACTIVE | EXPIRED | PAUSED
+// JobStatus values: DRAFT | ACTIVE | EXPIRED | PAUSED | DELETED
 // FlexTag values: SCHOOL_HOURS | TERM_TIME | FOUR_DAY_WEEK | JOB_SHARE | ASYNC | COMPRESSED_HOURS | FLEXIBLE_START_FINISH
 // ContractType values: PERMANENT | FTC | CONTRACT
 // AppStatus values: PENDING | REVIEWED | SHORTLISTED | REJECTED
@@ -65,7 +65,6 @@ model User {
   company      Company?
   applications Application[]
   savedJobs    SavedJob[]
-  subscription SeekerSubscription?
 }
 
 model Company {
@@ -101,11 +100,10 @@ model Job {
   salaryMax       Int?
   location        String?
   remote          Boolean   @default(false)
-  flexible        Boolean   @default(false)
   partTime        Boolean   @default(false)
   featured        Boolean   @default(false)
   featuredUntil   DateTime?
-  status          String    @default("DRAFT") // DRAFT | ACTIVE | EXPIRED | PAUSED
+  status          String    @default("DRAFT") // DRAFT | ACTIVE | EXPIRED | PAUSED | DELETED
   closingDate     DateTime?
   sector            String?
   applyUrl          String?
@@ -164,29 +162,6 @@ model SavedJob {
   createdAt DateTime @default(now())
 
   @@id([userId, jobId])
-}
-
-model SeekerSubscription {
-  id                   String   @id @default(cuid())
-  userId               String   @unique
-  user                 User     @relation(fields: [userId], references: [id])
-  stripeCustomerId     String?
-  stripeSubscriptionId String?
-  status               String   // active | canceled | past_due
-  createdAt            DateTime @default(now())
-}
-
-model Ad {
-  id          String   @id @default(cuid())
-  advertiser  String
-  imageUrl    String
-  clickUrl    String
-  placement   String   // homepage | sidebar | job_listing
-  active      Boolean  @default(true)
-  impressions Int      @default(0)
-  clicks      Int      @default(0)
-  startDate   DateTime
-  endDate     DateTime
 }
 
 model NewsletterSubscriber {

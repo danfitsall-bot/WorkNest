@@ -52,10 +52,6 @@ export const PLAN_LIMITS: Record<Plan, {
   },
 }
 
-export function canPostJob(plan: Plan, currentListings: number): boolean {
-  return currentListings < PLAN_LIMITS[plan].maxListings
-}
-
 export function canFeature(plan: Plan): boolean {
   return PLAN_LIMITS[plan].featured
 }

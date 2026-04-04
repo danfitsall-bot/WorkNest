@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { canFeature } from '@/lib/plans'
 import type { Plan } from '@/lib/plans'
+import { VALID_CONTRACT_TYPES, VALID_TAGS } from '@/lib/constants'
 
 function slugify(str: string) {
   return str
@@ -12,9 +13,6 @@ function slugify(str: string) {
     .replace(/^-|-$/g, '')
     + '-' + Math.random().toString(36).slice(2, 7)
 }
-
-const VALID_CONTRACT_TYPES = ['PERMANENT', 'FTC', 'CONTRACT']
-const VALID_TAGS = ['SCHOOL_HOURS', 'TERM_TIME', 'FOUR_DAY_WEEK', 'JOB_SHARE', 'ASYNC', 'COMPRESSED_HOURS', 'FLEXIBLE_START_FINISH']
 
 function validateJobInput(body: any): string | null {
   if (!body.title || typeof body.title !== 'string') return 'Title is required'
@@ -59,11 +57,13 @@ function validateJobInput(body: any): string | null {
   return null
 }
 
+// TODO: Add CSRF protection for state-changing endpoints
+// TODO: Add rate limiting to prevent abuse
 export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    if ((session.user as any).role !== 'EMPLOYER' && (session.user as any).role !== 'ADMIN') {
+    if (session.user.role !== 'EMPLOYER' && session.user.role !== 'ADMIN') {
       return NextResponse.json({ error: 'Employer account required' }, { status: 403 })
     }
 
@@ -80,7 +80,7 @@ export async function POST(req: NextRequest) {
     } = body
 
     // Verify the user owns the company
-    const company = await prisma.company.findUnique({ where: { userId: (session.user as any).id } })
+    const company = await prisma.company.findUnique({ where: { userId: session.user.id } })
     if (!company || company.id !== companyId) {
       return NextResponse.json({ error: 'You can only post jobs for your own company' }, { status: 403 })
     }
@@ -131,6 +131,7 @@ export async function GET(req: NextRequest) {
     const rawLimit = parseInt(searchParams.get('limit') ?? '20')
     const limit = Math.min(Math.max(isNaN(rawLimit) ? 20 : rawLimit, 1), 100)
 
+    // Only return ACTIVE jobs to the public API. DELETED, DRAFT, PAUSED, and EXPIRED are excluded.
     const where: any = { status: 'ACTIVE' }
     if (q) {
       const safeQ = q.slice(0, 200)

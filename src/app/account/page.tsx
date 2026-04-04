@@ -16,7 +16,7 @@ export default async function AccountPage() {
   const session = await getServerSession(authOptions)
   if (!session?.user) redirect('/auth/signin?callbackUrl=/account')
 
-  const userId = (session.user as any).id
+  const userId = session.user.id
 
   const [applications, savedJobs] = await Promise.all([
     prisma.application.findMany({

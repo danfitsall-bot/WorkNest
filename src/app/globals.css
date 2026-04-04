@@ -13,15 +13,6 @@ body {
 }
 
 @layer utilities {
-  .badge {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
-  }
-  .btn-primary {
-    @apply bg-coral-500 hover:bg-coral-600 text-white font-semibold py-2.5 px-5 rounded-xl transition-colors;
-  }
-  .btn-secondary {
-    @apply bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-medium py-2.5 px-5 rounded-xl transition-colors;
-  }
   .card {
     @apply bg-white rounded-2xl shadow-sm border border-gray-100;
   }

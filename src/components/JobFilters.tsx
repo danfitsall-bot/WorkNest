@@ -2,6 +2,7 @@
 
 import { useRouter, usePathname } from 'next/navigation'
 import { useState, useCallback } from 'react'
+import { FLEX_TAGS, SECTORS, CONTRACT_TYPES } from '@/lib/constants'
 
 interface Filters {
   q?: string
@@ -16,26 +17,10 @@ interface Filters {
   officeDaysMax?: string
 }
 
-const FLEX_TAGS = [
-  { value: 'FOUR_DAY_WEEK', label: '4-Day Week', icon: '📅' },
-  { value: 'SCHOOL_HOURS', label: 'School Hours', icon: '🏫' },
-  { value: 'TERM_TIME', label: 'Term-Time', icon: '📚' },
-  { value: 'JOB_SHARE', label: 'Job Share', icon: '🤝' },
-  { value: 'ASYNC', label: 'Async', icon: '💬' },
-  { value: 'COMPRESSED_HOURS', label: 'Compressed', icon: '⏰' },
-  { value: 'FLEXIBLE_START_FINISH', label: 'Flex Start/Finish', icon: '🕐' },
-]
-
-const SECTORS = [
-  'Technology', 'Marketing', 'Finance', 'Healthcare', 'Education',
-  'Design', 'Operations', 'HR', 'Legal', 'Retail',
-]
-
-const CONTRACT_TYPES = [
-  { value: 'PERMANENT', label: 'Permanent' },
-  { value: 'FTC', label: 'Fixed-term' },
-  { value: 'CONTRACT', label: 'Contract' },
-]
+const FLEX_TAG_ICONS: Record<string, string> = {
+  FOUR_DAY_WEEK: '📅', SCHOOL_HOURS: '🏫', TERM_TIME: '📚',
+  JOB_SHARE: '🤝', ASYNC: '💬', COMPRESSED_HOURS: '⏰', FLEXIBLE_START_FINISH: '🕐',
+}
 
 export default function JobFilters({ current }: { current: Filters }) {
   const router = useRouter()
@@ -149,7 +134,7 @@ export default function JobFilters({ current }: { current: Filters }) {
                 onChange={() => toggleTag(t.value)}
                 className="w-4 h-4 text-teal-600 rounded"
               />
-              <span className="text-sm text-gray-700">{t.icon} {t.label}</span>
+              <span className="text-sm text-gray-700">{FLEX_TAG_ICONS[t.value] ?? ''} {t.label}</span>
             </label>
           ))}
           {tags.length > 0 && (
