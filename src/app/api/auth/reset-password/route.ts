@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
+import crypto from 'crypto'
 import { prisma } from '@/lib/prisma'
 
 export async function POST(req: NextRequest) {
@@ -10,9 +11,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid input' }, { status: 400 })
     }
 
+    // The stored token is a SHA-256 hash of the raw token sent via email
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex')
+
     // Find and validate the token
     const verification = await prisma.verificationToken.findFirst({
-      where: { identifier: email, token },
+      where: { identifier: email, token: hashedToken },
     })
 
     if (!verification || verification.expires < new Date()) {
@@ -26,9 +30,9 @@ export async function POST(req: NextRequest) {
       data: { hashedPassword },
     })
 
-    // Delete the used token
+    // Delete the used token (stored as hashed value)
     await prisma.verificationToken.delete({
-      where: { identifier_token: { identifier: email, token: verification.token } },
+      where: { identifier_token: { identifier: email, token: hashedToken } },
     })
 
     return NextResponse.json({ ok: true })

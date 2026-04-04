@@ -1,6 +1,10 @@
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Lazy-initialize so build-time static analysis does not throw when env vars are absent
+function getResend() {
+  return new Resend(process.env.RESEND_API_KEY ?? '')
+}
+
 export const FROM = process.env.RESEND_FROM_EMAIL ?? 'hello@worknest.co.uk'
 
 function escapeHtml(s: string): string {
@@ -8,7 +12,7 @@ function escapeHtml(s: string): string {
 }
 
 export async function sendWelcomeEmail(to: string, name: string) {
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM,
     to,
     subject: 'Welcome to WorkNest 🌿',
@@ -26,7 +30,7 @@ export async function sendJobAlertEmail(to: string, jobs: { title: string; compa
     .map(j => `<li><a href="${process.env.NEXT_PUBLIC_APP_URL}/jobs/${encodeURIComponent(j.slug)}">${escapeHtml(j.title)} at ${escapeHtml(j.company)}</a></li>`)
     .join('')
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM,
     to,
     subject: `${jobs.length} new jobs matching your alert`,
@@ -39,7 +43,7 @@ export async function sendJobAlertEmail(to: string, jobs: { title: string; compa
 }
 
 export async function sendNewApplicantEmail(to: string, applicantName: string, jobTitle: string, jobId: string) {
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM,
     to,
     subject: `New application — ${escapeHtml(jobTitle)}`,
@@ -52,7 +56,7 @@ export async function sendNewApplicantEmail(to: string, applicantName: string, j
 }
 
 export async function sendApplicationConfirmEmail(to: string, jobTitle: string, company: string) {
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM,
     to,
     subject: `Application submitted — ${escapeHtml(jobTitle)} at ${escapeHtml(company)}`,
@@ -66,7 +70,7 @@ export async function sendApplicationConfirmEmail(to: string, jobTitle: string, 
 }
 
 export async function sendPasswordResetEmail(to: string, resetUrl: string) {
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM,
     to,
     subject: 'Reset your WorkNest password',

@@ -4,7 +4,7 @@ import JobCard from '@/components/JobCard'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import EmployerLogoCard from '@/components/EmployerLogoCard'
 
-export const revalidate = 60 // ISR: re-generate every 60 seconds
+export const dynamic = 'force-dynamic'
 
 async function getFeaturedJobs() {
   return prisma.job.findMany({

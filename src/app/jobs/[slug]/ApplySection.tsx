@@ -6,19 +6,21 @@ import Link from 'next/link'
 
 interface Props {
   jobId: string
+  jobSlug: string
   jobTitle: string
   company: string
   applyUrl: string | null
   initialSaved?: boolean
 }
 
-export default function ApplySection({ jobId, jobTitle, company, applyUrl, initialSaved = false }: Props) {
+export default function ApplySection({ jobId, jobSlug, jobTitle, company, applyUrl, initialSaved = false }: Props) {
   const { data: session } = useSession()
   const [saved, setSaved] = useState(initialSaved)
   const [applied, setApplied] = useState(false)
   const [coverLetter, setCoverLetter] = useState('')
   const [showForm, setShowForm] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [applyError, setApplyError] = useState('')
   const [copied, setCopied] = useState(false)
 
   async function handleSave() {
@@ -34,6 +36,7 @@ export default function ApplySection({ jobId, jobTitle, company, applyUrl, initi
 
   async function handleApply(e: React.FormEvent) {
     e.preventDefault()
+    setApplyError('')
     setLoading(true)
     const res = await fetch('/api/applications', {
       method: 'POST',
@@ -44,6 +47,9 @@ export default function ApplySection({ jobId, jobTitle, company, applyUrl, initi
     if (res.ok) {
       setApplied(true)
       setShowForm(false)
+    } else {
+      const data = await res.json().catch(() => ({}))
+      setApplyError(data.error ?? 'Failed to submit application. Please try again.')
     }
   }
 
@@ -75,10 +81,13 @@ export default function ApplySection({ jobId, jobTitle, company, applyUrl, initi
       ) : session ? (
         showForm ? (
           <form onSubmit={handleApply} className="space-y-3">
+            {applyError && (
+              <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm">{applyError}</div>
+            )}
             <textarea
               value={coverLetter}
               onChange={e => setCoverLetter(e.target.value)}
-              placeholder="Tell them why you&apos;re a great fit (optional)…"
+              placeholder="Tell them why you're a great fit (optional)…"
               rows={5}
               maxLength={10000}
               className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
@@ -104,7 +113,7 @@ export default function ApplySection({ jobId, jobTitle, company, applyUrl, initi
         )
       ) : (
         <Link
-          href={`/auth/signin?callbackUrl=/jobs/${jobId}`}
+          href={`/auth/signin?callbackUrl=/jobs/${jobSlug}`}
           className="block w-full bg-coral-500 hover:bg-coral-600 text-white font-bold py-3 px-4 rounded-xl text-center transition-colors"
         >
           Sign in to apply

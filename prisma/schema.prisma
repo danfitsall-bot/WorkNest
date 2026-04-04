@@ -152,6 +152,9 @@ model Application {
   updatedAt   DateTime @updatedAt
 
   @@unique([jobId, userId])
+  @@index([userId])
+  @@index([jobId])
+  @@index([status])
 }
 
 model SavedJob {
@@ -162,6 +165,8 @@ model SavedJob {
   createdAt DateTime @default(now())
 
   @@id([userId, jobId])
+  @@index([userId])
+  @@index([jobId])
 }
 
 model NewsletterSubscriber {

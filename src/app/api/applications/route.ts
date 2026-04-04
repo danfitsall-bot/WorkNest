@@ -58,7 +58,7 @@ export async function GET() {
     if (!session?.user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     const userId = session.user.id
     const applications = await prisma.application.findMany({
-      where: { userId },
+      where: { userId, job: { status: { not: 'DELETED' } } },
       include: { job: { include: { company: true } } },
       orderBy: { createdAt: 'desc' },
     })

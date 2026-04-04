@@ -208,7 +208,7 @@ export default async function JobDetailPage({ params }: Props) {
           {/* Sidebar */}
           <div className="space-y-4">
             {/* Apply card */}
-            <ApplySection jobId={job.id} jobTitle={job.title} company={job.company.name} applyUrl={job.applyUrl} initialSaved={initialSaved} />
+            <ApplySection jobId={job.id} jobSlug={job.slug} jobTitle={job.title} company={job.company.name} applyUrl={job.applyUrl} initialSaved={initialSaved} />
 
             {/* Childcare calculator */}
             {job.salaryMin && (
